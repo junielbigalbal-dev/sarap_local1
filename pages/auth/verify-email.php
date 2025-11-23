@@ -142,29 +142,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-radius: 8px;
             outline: none;
             transition: all 0.2s;
+            background: #F7FAFC;
         }
         .otp-input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(215, 15, 100, 0.1);
+            border-color: #C67D3B;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(198, 125, 59, 0.1);
+        }
+        /* Mobile Responsive OTP */
+        @media (max-width: 480px) {
+            .otp-container {
+                gap: 6px;
+            }
+            .otp-input {
+                width: 38px;
+                height: 48px;
+                font-size: 20px;
+                border-radius: 6px;
+                padding: 0;
+            }
+        }
+        /* Very Small Screens */
+        @media (max-width: 360px) {
+            .otp-container {
+                gap: 4px;
+            }
+            .otp-input {
+                width: 32px;
+                height: 42px;
+                font-size: 18px;
+            }
         }
         .resend-link {
             text-align: center;
             margin-top: 20px;
             font-size: 0.9rem;
-            color: var(--gray-600);
+            color: #718096;
         }
         .resend-btn {
             background: none;
             border: none;
-            color: var(--primary);
+            color: #C67D3B;
             font-weight: 600;
             cursor: pointer;
             padding: 0;
             font-family: inherit;
+            text-decoration: underline;
         }
         .resend-btn:disabled {
-            color: var(--gray-400);
+            color: #CBD5E0;
             cursor: not-allowed;
+            text-decoration: none;
         }
     </style>
 </head>
