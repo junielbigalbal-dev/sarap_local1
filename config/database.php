@@ -21,31 +21,6 @@ define('DB_USER', $_ENV['DB_USER'] ?? 'root');
 define('DB_PASS', $_ENV['DB_PASS'] ?? '');
 define('DB_CHARSET', 'utf8mb4');
 
-<?php
-/**
- * Database Configuration
- * PDO connection with error handling
- */
-
-// Load environment variables if .env exists
-if (file_exists(__DIR__ . '/../.env')) {
-    $lines = file(__DIR__ . '/../.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    foreach ($lines as $line) {
-        if (strpos(trim($line), '#') === 0) continue;
-        list($key, $value) = explode('=', $line, 2);
-        $_ENV[trim($key)] = trim($value);
-    }
-}
-
-// Database credentials
-// These defines are now mostly superseded by the new connection logic,
-// but kept for compatibility or if other parts of the app still rely on them.
-define('DB_HOST', $_ENV['DB_HOST'] ?? 'localhost');
-define('DB_NAME', $_ENV['DB_NAME'] ?? 'sarap_local');
-define('DB_USER', $_ENV['DB_USER'] ?? 'root');
-define('DB_PASS', $_ENV['DB_PASS'] ?? '');
-define('DB_CHARSET', 'utf8mb4');
-
 // Database configuration - supports both MySQL (local) and PostgreSQL (Render)
 
 // Check if running on Render (DATABASE_URL environment variable exists)
@@ -69,7 +44,6 @@ if ($database_url) {
     }
 } else {
     // LOCAL ENVIRONMENT - Use MySQL (XAMPP)
-    // Use defined constants for local environment if available, otherwise fallback
     $host = DB_HOST;
     $dbname = DB_NAME;
     $username = DB_USER;
