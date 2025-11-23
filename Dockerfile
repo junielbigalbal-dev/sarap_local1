@@ -24,8 +24,8 @@ COPY . /app
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Expose port
-EXPOSE 8080
+# Expose port (Render will set PORT env variable)
+EXPOSE ${PORT:-10000}
 
-# Start PHP built-in server
-CMD php -S 0.0.0.0:8080 -t .
+# Start PHP built-in server using Render's PORT
+CMD php -S 0.0.0.0:${PORT:-10000} -t .
