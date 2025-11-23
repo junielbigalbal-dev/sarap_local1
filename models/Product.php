@@ -52,13 +52,17 @@ class Product {
      * Get products by vendor
      */
     public function getByVendor($vendorId, $limit = 50, $offset = 0) {
+        // Cast to integers to avoid PDO binding issues
+        $limit = (int)$limit;
+        $offset = (int)$offset;
+        
         $stmt = $this->pdo->prepare("
             SELECT * FROM products 
             WHERE vendor_id = ?
             ORDER BY created_at DESC
-            LIMIT ? OFFSET ?
+            LIMIT $limit OFFSET $offset
         ");
-        $stmt->execute([$vendorId, $limit, $offset]);
+        $stmt->execute([$vendorId]);
         return $stmt->fetchAll();
     }
     
@@ -66,6 +70,10 @@ class Product {
      * Get active products
      */
     public function getActiveProducts($limit = 50, $offset = 0) {
+        // Cast to integers to avoid PDO binding issues
+        $limit = (int)$limit;
+        $offset = (int)$offset;
+        
         $stmt = $this->pdo->prepare("
             SELECT p.*, up.business_name as vendor_name
             FROM products p
@@ -73,9 +81,9 @@ class Product {
             LEFT JOIN user_profiles up ON u.id = up.user_id
             WHERE p.status = 'active' AND u.status = 'active'
             ORDER BY p.created_at DESC
-            LIMIT ? OFFSET ?
+            LIMIT $limit OFFSET $offset
         ");
-        $stmt->execute([$limit, $offset]);
+        $stmt->execute();
         return $stmt->fetchAll();
     }
     
