@@ -27,16 +27,19 @@ class MailService {
     private function configureSMTP() {
         try {
             // Server settings
+            // Server settings
             $this->mailer->isSMTP();
-            $this->mailer->Host       = SMTP_HOST;
+            $this->mailer->Host       = getenv('SMTP_HOST') ?: (defined('SMTP_HOST') ? SMTP_HOST : '');
             $this->mailer->SMTPAuth   = true;
-            $this->mailer->Username   = SMTP_USER;
-            $this->mailer->Password   = SMTP_PASS;
+            $this->mailer->Username   = getenv('SMTP_USER') ?: (defined('SMTP_USER') ? SMTP_USER : '');
+            $this->mailer->Password   = getenv('SMTP_PASS') ?: (defined('SMTP_PASS') ? SMTP_PASS : '');
             $this->mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $this->mailer->Port       = SMTP_PORT;
+            $this->mailer->Port       = getenv('SMTP_PORT') ?: (defined('SMTP_PORT') ? SMTP_PORT : 587);
 
             // Default sender
-            $this->mailer->setFrom(SMTP_USER, SITE_NAME);
+            $fromEmail = getenv('SMTP_USER') ?: (defined('SMTP_USER') ? SMTP_USER : '');
+            $fromName = defined('SITE_NAME') ? SITE_NAME : 'Sarap Local';
+            $this->mailer->setFrom($fromEmail, $fromName);
         } catch (Exception $e) {
             error_log("MailService Configuration Error: " . $e->getMessage());
             $this->useSMTP = false;
