@@ -84,16 +84,23 @@ class User {
     /**
      * Get all users by role
      */
+    /**
+     * Get all users by role
+     */
     public function getUsersByRole($role, $limit = 100, $offset = 0) {
+        // Cast to integers to avoid PDO binding issues
+        $limit = (int)$limit;
+        $offset = (int)$offset;
+        
         $stmt = $this->pdo->prepare("
             SELECT u.*, p.name, p.business_name 
             FROM users u
             LEFT JOIN user_profiles p ON u.id = p.user_id
             WHERE u.role = ?
             ORDER BY u.created_at DESC
-            LIMIT ? OFFSET ?
+            LIMIT $limit OFFSET $offset
         ");
-        $stmt->execute([$role, $limit, $offset]);
+        $stmt->execute([$role]);
         return $stmt->fetchAll();
     }
     
