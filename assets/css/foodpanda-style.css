@@ -151,20 +151,6 @@ body {
     background: var(--primary);
     border-radius: var(--radius-full);
     color: var(--white);
-    font-weight: 600;
-    font-size: 0.9375rem;
-    text-decoration: none;
-    transition: all 0.2s;
-}
-
-.btn-primary-nav:hover {
-    background: var(--primary-dark);
-    transform: translateY(-1px);
-}
-
-/* Hero Section */
-.hero-foodpanda {
-    position: relative;
     background-color: #F7F7F7;
     background-image: url('../../frontend/public/assets/hero-bg.jpg');
     background-size: cover;
