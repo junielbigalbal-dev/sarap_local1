@@ -1,0 +1,7 @@
+{
+    "name": "saraplocal/app",
+    "description": "Sarap Local Food Delivery App",
+    "require": {
+        "phpmailer/phpmailer": "^6.9"
+    }
+}
