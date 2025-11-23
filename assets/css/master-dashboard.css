@@ -82,6 +82,67 @@ body {
     padding: 0 var(--space-6);
 }
 
+/* Mobile Sidebar Styles */
+.sidebar-toggle {
+    display: none;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 2000;
+    background: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: var(--shadow-md);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1090;
+}
+
+@media (max-width: 768px) {
+    .sidebar-toggle {
+        display: block;
+    }
+
+    .sidebar {
+        position: fixed;
+        left: -280px;
+        top: 0;
+        bottom: 0;
+        z-index: 1100;
+        transition: left 0.3s ease;
+        width: 280px;
+        box-shadow: var(--shadow-xl);
+    }
+
+    .sidebar.active {
+        left: 0;
+    }
+
+    .sidebar-overlay.active {
+        display: block;
+    }
+
+    .main-content {
+        padding-top: 60px !important;
+        /* Space for toggle button */
+    }
+
+    .dashboard-header-modern {
+        margin-top: 20px;
+    }
+}
+
 /* Modern Navbar */
 .navbar-modern {
     background: var(--white);
