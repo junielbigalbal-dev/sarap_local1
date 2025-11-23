@@ -162,19 +162,6 @@ if ($view === 'messages') {
             </ul>
         </aside>
 
-        <!-- Mobile Sidebar Overlay -->
-        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
-
-        <!-- Mobile Toggle Button -->
-        <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
-
-        <script>
-            function toggleSidebar() {
-                document.querySelector('.sidebar').classList.toggle('active');
-                document.querySelector('.sidebar-overlay').classList.toggle('active');
-            }
-        </script>
-
         <!-- Main Content -->
         <main class="main-content" style="background: transparent; padding: 0;">
             

@@ -65,6 +65,9 @@ class Order {
     }
     
     public function getByCustomer($customerId, $limit = 50) {
+        // Cast to integer to avoid PDO binding issues
+        $limit = (int)$limit;
+        
         $stmt = $this->pdo->prepare("
             SELECT o.*, vp.business_name as vendor_name
             FROM orders o
@@ -72,13 +75,16 @@ class Order {
             LEFT JOIN user_profiles vp ON v.id = vp.user_id
             WHERE o.customer_id = ?
             ORDER BY o.created_at DESC
-            LIMIT ?
+            LIMIT $limit
         ");
-        $stmt->execute([$customerId, $limit]);
+        $stmt->execute([$customerId]);
         return $stmt->fetchAll();
     }
     
     public function getByVendor($vendorId, $status = null, $limit = 50) {
+        // Cast to integer to avoid PDO binding issues
+        $limit = (int)$limit;
+        
         if ($status) {
             $stmt = $this->pdo->prepare("
                 SELECT o.*, cp.name as customer_name, cp.phone
@@ -87,9 +93,9 @@ class Order {
                 LEFT JOIN user_profiles cp ON c.id = cp.user_id
                 WHERE o.vendor_id = ? AND o.status = ?
                 ORDER BY o.created_at DESC
-                LIMIT ?
+                LIMIT $limit
             ");
-            $stmt->execute([$vendorId, $status, $limit]);
+            $stmt->execute([$vendorId, $status]);
         } else {
             $stmt = $this->pdo->prepare("
                 SELECT o.*, cp.name as customer_name, cp.phone
@@ -98,9 +104,9 @@ class Order {
                 LEFT JOIN user_profiles cp ON c.id = cp.user_id
                 WHERE o.vendor_id = ?
                 ORDER BY o.created_at DESC
-                LIMIT ?
+                LIMIT $limit
             ");
-            $stmt->execute([$vendorId, $limit]);
+            $stmt->execute([$vendorId]);
         }
         return $stmt->fetchAll();
     }

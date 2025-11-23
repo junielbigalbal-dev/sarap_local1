@@ -123,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verify Email - <?php echo SITE_NAME; ?></title>
-    <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/auth-styles.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/auth-styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         .otp-container {
@@ -142,57 +142,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-radius: 8px;
             outline: none;
             transition: all 0.2s;
-            background: #F7FAFC;
         }
         .otp-input:focus {
-            border-color: #C67D3B;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(198, 125, 59, 0.1);
-        }
-        /* Mobile Responsive OTP */
-        @media (max-width: 480px) {
-            .otp-container {
-                gap: 6px;
-            }
-            .otp-input {
-                width: 38px;
-                height: 48px;
-                font-size: 20px;
-                border-radius: 6px;
-                padding: 0;
-            }
-        }
-        /* Very Small Screens */
-        @media (max-width: 360px) {
-            .otp-container {
-                gap: 4px;
-            }
-            .otp-input {
-                width: 32px;
-                height: 42px;
-                font-size: 18px;
-            }
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(215, 15, 100, 0.1);
         }
         .resend-link {
             text-align: center;
             margin-top: 20px;
             font-size: 0.9rem;
-            color: #718096;
+            color: var(--gray-600);
         }
         .resend-btn {
             background: none;
             border: none;
-            color: #C67D3B;
+            color: var(--primary);
             font-weight: 600;
             cursor: pointer;
             padding: 0;
             font-family: inherit;
-            text-decoration: underline;
         }
         .resend-btn:disabled {
-            color: #CBD5E0;
+            color: var(--gray-400);
             cursor: not-allowed;
-            text-decoration: none;
         }
     </style>
 </head>

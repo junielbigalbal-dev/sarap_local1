@@ -19,13 +19,16 @@ class Notification {
     }
     
     public function getByUser($userId, $limit = 20) {
+        // Cast to integer to avoid PDO binding issues
+        $limit = (int)$limit;
+        
         $stmt = $this->pdo->prepare("
             SELECT * FROM notifications 
             WHERE user_id = ?
             ORDER BY created_at DESC
-            LIMIT ?
+            LIMIT $limit
         ");
-        $stmt->execute([$userId, $limit]);
+        $stmt->execute([$userId]);
         return $stmt->fetchAll();
     }
     

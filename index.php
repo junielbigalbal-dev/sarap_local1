@@ -44,10 +44,7 @@ $categories = [
                 <img src="<?php echo SITE_URL; ?>/frontend/public/assets/logo.png" alt="<?php echo SITE_NAME; ?>" class="logo">
                 <span class="brand-name"><?php echo SITE_NAME; ?></span>
             </div>
-            
-            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
-            
-            <div class="navbar-actions" id="navbarActions">
+            <div class="navbar-actions">
                 <?php if (isLoggedIn()): ?>
                     <a href="<?php echo SITE_URL; ?>/pages/<?php echo getUserRole(); ?>/dashboard.php" class="nav-link">Dashboard</a>
                     <a href="<?php echo SITE_URL; ?>/pages/auth/logout.php" class="btn-outline">Logout</a>
@@ -58,13 +55,6 @@ $categories = [
             </div>
         </div>
     </nav>
-
-    <script>
-        function toggleMobileMenu() {
-            const nav = document.getElementById('navbarActions');
-            nav.classList.toggle('active');
-        }
-    </script>
 
     <!-- Hero Section with Search -->
     <section class="hero-foodpanda">

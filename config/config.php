@@ -6,13 +6,7 @@
 
 // Site settings
 define('SITE_NAME', 'Sarap Local');
-
-// Determine SITE_URL with HTTPS support for Render
-$siteUrl = $_ENV['SITE_URL'] ?? 'http://localhost/sarap_local1';
-if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
-    $siteUrl = str_replace('http://', 'https://', $siteUrl);
-}
-define('SITE_URL', $siteUrl);
+define('SITE_URL', $_ENV['SITE_URL'] ?? 'http://localhost/sarap_local1');
 define('SITE_EMAIL', $_ENV['SITE_EMAIL'] ?? 'noreply@saraplocal.com');
 
 // Paths

@@ -289,21 +289,7 @@ if ($view === 'products') {
                 <li><a href="dashboard.php?view=profile" class="<?php echo $view === 'profile' ? 'active' : ''; ?>">👤 Profile</a></li>
                 <li><a href="<?php echo SITE_URL; ?>/pages/auth/logout.php">🚪 Logout</a></li>
             </ul>
-            </ul>
         </aside>
-
-        <!-- Mobile Sidebar Overlay -->
-        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
-
-        <!-- Mobile Toggle Button -->
-        <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
-
-        <script>
-            function toggleSidebar() {
-                document.querySelector('.sidebar').classList.toggle('active');
-                document.querySelector('.sidebar-overlay').classList.toggle('active');
-            }
-        </script>
 
         <!-- Main Content -->
         <main class="main-content" style="background: transparent; padding: 0;">

@@ -91,6 +91,9 @@ class Product {
      * Search products
      */
     public function search($query, $limit = 50) {
+        // Cast to integer to avoid PDO binding issues
+        $limit = (int)$limit;
+        
         $stmt = $this->pdo->prepare("
             SELECT p.*, up.business_name as vendor_name
             FROM products p
@@ -99,11 +102,11 @@ class Product {
             WHERE p.status = 'active' 
               AND (p.name LIKE ? OR p.description LIKE ? OR p.category LIKE ?)
             ORDER BY p.created_at DESC
-            LIMIT ?
+            LIMIT $limit
         ");
         
         $searchTerm = "%$query%";
-        $stmt->execute([$searchTerm, $searchTerm, $searchTerm, $limit]);
+        $stmt->execute([$searchTerm, $searchTerm, $searchTerm]);
         return $stmt->fetchAll();
     }
     
@@ -144,6 +147,9 @@ class Product {
      * Get products by category
      */
     public function getByCategory($category, $limit = 50) {
+        // Cast to integer to avoid PDO binding issues
+        $limit = (int)$limit;
+        
         $stmt = $this->pdo->prepare("
             SELECT p.*, up.business_name as vendor_name
             FROM products p
@@ -151,9 +157,9 @@ class Product {
             LEFT JOIN user_profiles up ON u.id = up.user_id
             WHERE p.category = ? AND p.status = 'active'
             ORDER BY p.created_at DESC
-            LIMIT ?
+            LIMIT $limit
         ");
-        $stmt->execute([$category, $limit]);
+        $stmt->execute([$category]);
         return $stmt->fetchAll();
     }
     
@@ -161,6 +167,9 @@ class Product {
      * Get top products (by orders)
      */
     public function getTopProducts($limit = 10) {
+        // Cast to integer to avoid PDO binding issues
+        $limit = (int)$limit;
+        
         $stmt = $this->pdo->prepare("
             SELECT p.*, COUNT(oi.id) as order_count, SUM(oi.quantity) as total_sold
             FROM products p
@@ -168,9 +177,9 @@ class Product {
             WHERE p.status = 'active'
             GROUP BY p.id
             ORDER BY order_count DESC
-            LIMIT ?
+            LIMIT $limit
         ");
-        $stmt->execute([$limit]);
+        $stmt->execute();
         return $stmt->fetchAll();
     }
 }

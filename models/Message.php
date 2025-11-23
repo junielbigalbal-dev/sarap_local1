@@ -19,6 +19,9 @@ class Message {
     }
     
     public function getConversation($user1Id, $user2Id, $limit = 50) {
+        // Cast to integer to avoid PDO binding issues
+        $limit = (int)$limit;
+        
         $stmt = $this->pdo->prepare("
             SELECT m.*, 
                    s.email as sender_email, sp.name as sender_name,
@@ -31,9 +34,9 @@ class Message {
             WHERE (m.sender_id = ? AND m.receiver_id = ?) 
                OR (m.sender_id = ? AND m.receiver_id = ?)
             ORDER BY m.created_at DESC
-            LIMIT ?
+            LIMIT $limit
         ");
-        $stmt->execute([$user1Id, $user2Id, $user2Id, $user1Id, $limit]);
+        $stmt->execute([$user1Id, $user2Id, $user2Id, $user1Id]);
         return array_reverse($stmt->fetchAll());
     }
     
