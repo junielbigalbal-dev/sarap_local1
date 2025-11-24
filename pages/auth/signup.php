@@ -84,16 +84,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         ";
                         
-                        if ($mailService->send($email, 'Verify Your Email - ' . SITE_NAME, $emailBody, true)) {
-                            // Store email in session for verification page
+                        // Try to send email, but don't block signup if it fails
+                        $emailSent = $mailService->send($email, 'Verify Your Email - ' . SITE_NAME, $emailBody, true);
+                        
+                        if ($emailSent) {
+                            // Email sent successfully - redirect to verification page
                             $_SESSION['verify_email'] = $email;
                             redirect('verify-email.php');
                         } else {
-                            $error = 'Failed to send verification email. Please try again.';
+                            // Email failed - auto-verify user and allow login
+                            // This is a temporary workaround for production without SMTP
+                            $userModel->verifyEmail($userId);
+                            setFlashMessage('Account created! Email verification skipped (SMTP not configured). You can now login.', 'success');
+                            redirect('login.php');
                         }
                         
                     } catch (Exception $e) {
-                        $error = 'Registration failed. Please try again.';
+                        $error = 'Registration failed: ' . $e->getMessage();
                         error_log($e->getMessage());
                     }
                 }
