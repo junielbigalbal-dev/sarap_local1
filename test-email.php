@@ -19,12 +19,14 @@ $smtp_host = getenv('SMTP_HOST');
 $smtp_port = getenv('SMTP_PORT');
 $smtp_user = getenv('SMTP_USER');
 $smtp_pass = getenv('SMTP_PASS');
+$brevo_api = getenv('BREVO_API_KEY');
 
 echo "<h2>SMTP Configuration:</h2><ul>";
 echo "<li>SMTP_HOST: " . ($smtp_host ? "<span class='success'>✅ " . htmlspecialchars($smtp_host) . "</span>" : "<span class='error'>❌ Not set</span>") . "</li>";
 echo "<li>SMTP_PORT: " . ($smtp_port ? "<span class='success'>✅ " . htmlspecialchars($smtp_port) . "</span>" : "<span class='error'>❌ Not set</span>") . "</li>";
 echo "<li>SMTP_USER: " . ($smtp_user ? "<span class='success'>✅ " . htmlspecialchars($smtp_user) . "</span>" : "<span class='error'>❌ Not set</span>") . "</li>";
 echo "<li>SMTP_PASS: " . ($smtp_pass ? "<span class='success'>✅ Set (length: " . strlen($smtp_pass) . " chars)</span>" : "<span class='error'>❌ Not set</span>") . "</li>";
+echo "<li><strong>BREVO_API_KEY: " . ($brevo_api ? "<span class='success'>✅ Set (length: " . strlen($brevo_api) . " chars)</span>" : "<span class='error'>❌ NOT SET - ADD THIS!</span>") . "</strong></li>";
 echo "</ul>";
 
 if (isset($_POST['send_test'])) {
