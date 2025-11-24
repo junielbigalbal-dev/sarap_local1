@@ -214,6 +214,7 @@ To enable map features:
 - Check if Apache is running
 - Verify the URL: http://localhost/sarap_local1/
 - Check `.htaccess` file exists
+- **Deployed?** See `DEPLOYMENT-GUIDE.md` for configuration details.
 
 ### Email Not Sending
 - Email verification requires SMTP configuration
