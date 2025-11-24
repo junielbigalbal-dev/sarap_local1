@@ -303,6 +303,7 @@ if ($view === 'products') {
             <?php if ($view === 'home'): ?>
             <!-- Modern Header (Persistent) -->
             <div class="dashboard-header-modern">
+                <button id="customerMobileMenuBtn" style="display: none; background: transparent; border: none; font-size: 1.8rem; color: white; margin-right: 15px; cursor: pointer; padding: 0;">☰</button>
                 <div class="user-welcome">
                     <h1>Hello, <?php echo htmlspecialchars(explode(' ', $user['name'] ?? '')[0] ?: 'Guest'); ?>! 👋</h1>
                     <p>What are you craving today?</p>
@@ -1404,5 +1405,89 @@ if ($view === 'products') {
             </div>
         </main>
     </div>
+    <script>
+        // Mobile Sidebar Toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileBtn = document.getElementById('customerMobileMenuBtn');
+            const sidebar = document.querySelector('.sidebar');
+            
+            // Create overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'sidebar-overlay';
+            document.body.appendChild(overlay);
+            
+            function toggleSidebar() {
+                sidebar.classList.toggle('mobile-open');
+                overlay.classList.toggle('active');
+                document.body.style.overflow = sidebar.classList.contains('mobile-open') ? 'hidden' : '';
+            }
+            
+            if (mobileBtn) {
+                mobileBtn.addEventListener('click', toggleSidebar);
+            }
+            
+            overlay.addEventListener('click', toggleSidebar);
+            
+            // Close sidebar when clicking links
+            const sidebarLinks = document.querySelectorAll('.sidebar-menu a');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) {
+                        sidebar.classList.remove('mobile-open');
+                        overlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+            
+            // Swipe Gestures
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            document.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, {passive: true});
+            
+            document.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, {passive: true});
+            
+            function handleSwipe() {
+                if (window.innerWidth > 768) return;
+                
+                const swipeThreshold = 50;
+                const swipeDistance = touchEndX - touchStartX;
+                
+                // Swipe right to open
+                if (swipeDistance > swipeThreshold && touchStartX < 30) {
+                    if (!sidebar.classList.contains('mobile-open')) {
+                        toggleSidebar();
+                    }
+                }
+                
+                // Swipe left to close
+                if (swipeDistance < -swipeThreshold) {
+                    if (sidebar.classList.contains('mobile-open')) {
+                        toggleSidebar();
+                    }
+                }
+            }
+            
+            // Show mobile button on small screens
+            function checkMobile() {
+                if (mobileBtn) {
+                    if (window.innerWidth <= 768) {
+                        mobileBtn.style.display = 'block';
+                    } else {
+                        mobileBtn.style.display = 'none';
+                    }
+                }
+            }
+            
+            window.addEventListener('resize', checkMobile);
+            checkMobile();
+        });
+    </script>
 </body>
 </html>
