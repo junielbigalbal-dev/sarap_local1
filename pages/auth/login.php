@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($user && verifyPassword($password, $user['password_hash'])) {
                 if ($user['status'] === 'banned') {
                     $error = 'Your account has been banned';
-                } elseif (!$user['email_verified']) {
+                } elseif (!$user['is_verified']) {
                     $_SESSION['verify_email'] = $email;
                     $error = 'Email not verified. <a href="verify-email.php" style="color: var(--primary);">Verify now</a>';
                 } else {
