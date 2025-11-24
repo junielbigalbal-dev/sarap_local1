@@ -10,7 +10,15 @@ define('SITE_NAME', 'Sarap Local');
 if (isset($_ENV['SITE_URL'])) {
     define('SITE_URL', $_ENV['SITE_URL']);
 } else {
-    $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+    // Detect protocol - check for reverse proxy headers (Render, etc.)
+    $protocol = 'http';
+    if (
+        (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ||
+        (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') ||
+        (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] === 'on')
+    ) {
+        $protocol = 'https';
+    }
     $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
     
     // If running on localhost, assume subdirectory structure
