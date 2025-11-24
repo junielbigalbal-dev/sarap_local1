@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $userModel = new User($pdo);
             $user = $userModel->findByEmail($email);
             
-            if ($user && verifyPassword($password, $user['password_hash'])) {
+            if ($user && verifyPassword($password, $user['password'])) {
                 if ($user['status'] === 'banned') {
                     $error = 'Your account has been banned';
                 } elseif (!$user['is_verified']) {
