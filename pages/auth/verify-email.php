@@ -34,23 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (strlen($otp) !== 6 || !ctype_digit($otp)) {
                 $error = 'Please enter a valid 6-digit code';
             } else {
-                // Verify OTP
-                $stmt = $pdo->prepare("
-                    SELECT * FROM email_verifications 
-                    WHERE user_id = ? AND token = ? AND expires_at > NOW()
-                    ORDER BY created_at DESC LIMIT 1
-                ");
-                $stmt->execute([$user['id'], $otp]);
-                $verification = $stmt->fetch();
-                
-                if ($verification) {
-                    // Mark email as verified
-                    $userModel->verifyEmail($user['id']);
-                    
-                    // Clean up verifications
-                    $stmt = $pdo->prepare("DELETE FROM email_verifications WHERE user_id = ?");
-                    $stmt->execute([$user['id']]);
-                    
+                // Verify OTP using User model
+                if ($userModel->verifyCode($user['id'], $otp)) {
                     // Login the user
                     $profile = $userModel->getProfile($user['id']);
                     loginUser($user['id'], $user['role'], $profile);
@@ -65,31 +50,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     } elseif (isset($_POST['resend_code'])) {
-        // Resend Logic
+        // Resend Logic using User model
         if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
             $error = 'Invalid request';
         } else {
-            // Check cooldown (1 minute)
-            $stmt = $pdo->prepare("
-                SELECT created_at FROM email_verifications 
-                WHERE user_id = ? 
-                ORDER BY created_at DESC LIMIT 1
-            ");
-            $stmt->execute([$user['id']]);
-            $lastSent = $stmt->fetch();
+            $result = $userModel->resendVerificationCode($user['id']);
             
-            if ($lastSent && (time() - strtotime($lastSent['created_at'])) < 60) {
-                $error = 'Please wait a minute before resending';
+            if (!$result['success']) {
+                $error = $result['message'];
             } else {
-                // Generate new OTP
-                $otp = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
-                $expiresAt = date('Y-m-d H:i:s', strtotime('+15 minutes'));
-                
-                $stmt = $pdo->prepare("
-                    INSERT INTO email_verifications (user_id, token, expires_at)
-                    VALUES (?, ?, ?)
-                ");
-                $stmt->execute([$user['id'], $otp, $expiresAt]);
+                $otp = $result['code'];
                 
                 // Send email
                 $mailService = new MailService();
@@ -130,27 +100,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             display: flex;
             gap: 10px;
             justify-content: center;
-            margin: 20px 0;
+            margin: 30px 0;
         }
         .otp-input {
-            width: 45px;
-            height: 55px;
+            width: 50px;
+            height: 60px;
             text-align: center;
             font-size: 24px;
             font-weight: bold;
             border: 2px solid #e2e8f0;
-            border-radius: 8px;
+            border-radius: 12px;
             outline: none;
             transition: all 0.2s;
+            background: #f8fafc;
         }
         .otp-input:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(215, 15, 100, 0.1);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(215, 15, 100, 0.1);
+            transform: translateY(-2px);
         }
         .resend-link {
             text-align: center;
-            margin-top: 20px;
-            font-size: 0.9rem;
+            margin-top: 25px;
+            font-size: 0.95rem;
             color: var(--gray-600);
         }
         .resend-btn {
@@ -161,27 +134,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             cursor: pointer;
             padding: 0;
             font-family: inherit;
+            text-decoration: underline;
+            transition: color 0.2s;
+        }
+        .resend-btn:hover {
+            color: #b00c52;
         }
         .resend-btn:disabled {
             color: var(--gray-400);
             cursor: not-allowed;
+            text-decoration: none;
+        }
+        .auth-container {
+            max-width: 450px;
+        }
+        .verification-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            display: block;
+            text-align: center;
         }
     </style>
 </head>
 <body>
     <div class="auth-container">
         <div class="auth-logo">
-            <img src="<?php echo SITE_URL; ?>/frontend/public/assets/logo.png" alt="<?php echo SITE_NAME; ?>">
-            <h1>Verify Email</h1>
-            <p>We sent a code to <strong><?php echo htmlspecialchars($email); ?></strong></p>
+            <span class="verification-icon">✉️</span>
+            <h1>Verify Your Email</h1>
+            <p>We've sent a 6-digit code to<br><strong><?php echo htmlspecialchars($email); ?></strong></p>
         </div>
         
         <?php if ($error): ?>
-            <div class="alert alert-error"><?php echo $error; ?></div>
+            <div class="alert alert-error">
+                <span style="margin-right: 8px;">⚠️</span>
+                <?php echo $error; ?>
+            </div>
         <?php endif; ?>
         
         <?php if ($success): ?>
-            <div class="alert alert-success"><?php echo $success; ?></div>
+            <div class="alert alert-success">
+                <span style="margin-right: 8px;">✅</span>
+                <?php echo $success; ?>
+            </div>
         <?php endif; ?>
         
         <form method="POST" action="" class="auth-form" id="otpForm">
@@ -191,12 +185,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="otp-container">
                 <?php for($i=0; $i<6; $i++): ?>
                 <input type="text" name="otp[]" class="otp-input" maxlength="1" pattern="[0-9]" required 
+                       autocomplete="off"
                        oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(this.value.length === 1) { var next = this.nextElementSibling; if(next) next.focus(); }"
-                       onkeydown="if(event.key === 'Backspace' && this.value.length === 0) { var prev = this.previousElementSibling; if(prev) prev.focus(); }">
+                       onkeydown="if(event.key === 'Backspace' && this.value.length === 0) { var prev = this.previousElementSibling; if(prev) prev.focus(); }"
+                       onpaste="handlePaste(event)">
                 <?php endfor; ?>
             </div>
             
-            <button type="submit" class="btn-primary">Verify Account</button>
+            <button type="submit" class="btn-primary" style="padding: 14px;">Verify Account</button>
         </form>
         
         <form method="POST" action="" id="resendForm">
@@ -209,8 +205,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
         
         <div class="auth-links">
-            <p><a href="logout.php">Use a different email</a></p>
+            <p><a href="logout.php" style="color: var(--gray-600); text-decoration: none; font-size: 0.9rem;">← Use a different email address</a></p>
         </div>
     </div>
+
+    <script>
+        // Handle paste event for OTP
+        function handlePaste(e) {
+            e.preventDefault();
+            const pastedData = (e.clipboardData || window.clipboardData).getData('text');
+            const otpInputs = document.querySelectorAll('.otp-input');
+            
+            if (pastedData.match(/^\d{6}$/)) {
+                otpInputs.forEach((input, index) => {
+                    input.value = pastedData[index];
+                });
+                otpInputs[5].focus();
+            }
+        }
+    </script>
 </body>
 </html>

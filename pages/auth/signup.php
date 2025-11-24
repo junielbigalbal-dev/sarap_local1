@@ -65,14 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $userModel->createProfile($userId, ['name' => $name]);
                         
                         // Generate 6-digit OTP
-                        $otp = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
-                        $expiresAt = date('Y-m-d H:i:s', strtotime('+15 minutes'));
-                        
-                        $stmt = $pdo->prepare("
-                            INSERT INTO email_verifications (user_id, token, expires_at)
-                            VALUES (?, ?, ?)
-                        ");
-                        $stmt->execute([$userId, $otp, $expiresAt]);
+                        $otp = $userModel->createVerificationCode($userId);
                         
                         // Send verification email
                         $mailService = new MailService();

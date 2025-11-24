@@ -173,4 +173,67 @@ class User {
         $stmt->execute([$lat, $lng, $lat, $radiusKm]);
         return $stmt->fetchAll();
     }
+    /**
+     * Create verification code
+     */
+    public function createVerificationCode($userId) {
+        // Generate 6-digit OTP
+        $otp = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+        $expiresAt = date('Y-m-d H:i:s', strtotime('+15 minutes'));
+        
+        $stmt = $this->pdo->prepare("
+            INSERT INTO email_verifications (user_id, token, expires_at)
+            VALUES (?, ?, ?)
+        ");
+        $stmt->execute([$userId, $otp, $expiresAt]);
+        
+        return $otp;
+    }
+
+    /**
+     * Verify code
+     */
+    public function verifyCode($userId, $code) {
+        $stmt = $this->pdo->prepare("
+            SELECT * FROM email_verifications 
+            WHERE user_id = ? AND token = ? AND expires_at > NOW()
+            ORDER BY created_at DESC LIMIT 1
+        ");
+        $stmt->execute([$userId, $code]);
+        $verification = $stmt->fetch();
+        
+        if ($verification) {
+            // Mark email as verified
+            $this->verifyEmail($userId);
+            
+            // Clean up verifications
+            $stmt = $this->pdo->prepare("DELETE FROM email_verifications WHERE user_id = ?");
+            $stmt->execute([$userId]);
+            
+            return true;
+        }
+        
+        return false;
+    }
+
+    /**
+     * Resend verification code
+     */
+    public function resendVerificationCode($userId) {
+        // Check cooldown (1 minute)
+        $stmt = $this->pdo->prepare("
+            SELECT created_at FROM email_verifications 
+            WHERE user_id = ? 
+            ORDER BY created_at DESC LIMIT 1
+        ");
+        $stmt->execute([$userId]);
+        $lastSent = $stmt->fetch();
+        
+        if ($lastSent && (time() - strtotime($lastSent['created_at'])) < 60) {
+            return ['success' => false, 'message' => 'Please wait a minute before resending'];
+        }
+        
+        $otp = $this->createVerificationCode($userId);
+        return ['success' => true, 'code' => $otp];
+    }
 }
