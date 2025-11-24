@@ -18,8 +18,8 @@ try {
     echo "- products\n";
     echo "- orders\n";
     echo "- order_items\n";
-    echo "- email_verifications\n";
-    echo "- messages\n\n";
+    echo "- messages\n";
+    echo "- email_verifications\n\n";
     echo "Default admin user created:\n";
     echo "Email: admin@saraplocal.com\n";
     echo "Password: password\n\n";
