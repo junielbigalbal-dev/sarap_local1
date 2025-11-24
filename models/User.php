@@ -16,7 +16,7 @@ class User {
      */
     public function create($email, $password, $role = 'customer') {
         $stmt = $this->pdo->prepare("
-            INSERT INTO users (email, password_hash, role, email_verified) 
+            INSERT INTO users (email, password, role, is_verified) 
             VALUES (?, ?, ?, FALSE)
         ");
         
@@ -69,7 +69,7 @@ class User {
      * Update user email verification status
      */
     public function verifyEmail($userId) {
-        $stmt = $this->pdo->prepare("UPDATE users SET email_verified = TRUE WHERE id = ?");
+        $stmt = $this->pdo->prepare("UPDATE users SET is_verified = TRUE WHERE id = ?");
         return $stmt->execute([$userId]);
     }
     
