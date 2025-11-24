@@ -1,15 +1,30 @@
 <?php
 /**
  * Router for PHP Built-in Server
- * Ensures static files (CSS, JS, images) are served correctly
+ * Ensures static files (CSS, JS, images) and PHP files are served correctly
  */
 
 $uri = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+$filepath = __DIR__ . $uri;
+
+// If it's a directory, look for index.php
+if (is_dir($filepath)) {
+    if (file_exists($filepath . '/index.php')) {
+        require $filepath . '/index.php';
+        return true;
+    }
+}
+
+// If it's a PHP file, execute it
+if (file_exists($filepath) && pathinfo($filepath, PATHINFO_EXTENSION) === 'php') {
+    require $filepath;
+    return true;
+}
 
 // Serve static files directly
-if ($uri !== '/' && file_exists(__DIR__ . $uri)) {
+if (file_exists($filepath)) {
     // Get the file extension
-    $ext = pathinfo($uri, PATHINFO_EXTENSION);
+    $ext = pathinfo($filepath, PATHINFO_EXTENSION);
     
     // Set appropriate content type
     $contentTypes = [
@@ -35,5 +50,8 @@ if ($uri !== '/' && file_exists(__DIR__ . $uri)) {
     return false; // Serve the file
 }
 
-// For all other requests, let PHP handle them normally
-return false;
+// If file doesn't exist, return 404
+http_response_code(404);
+echo "404 - File not found";
+return true;
+
