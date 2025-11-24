@@ -12,6 +12,13 @@ function sanitize($data) {
 }
 
 /**
+ * Safe HTML escape (handles null values)
+ */
+function esc($string) {
+    return htmlspecialchars($string ?? '', ENT_QUOTES, 'UTF-8');
+}
+
+/**
  * Validate email
  */
 function isValidEmail($email) {
