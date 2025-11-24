@@ -167,14 +167,14 @@ if ($view === 'messages') {
             
             <?php $flash = getFlashMessage(); if ($flash): ?>
                 <div class="alert alert-<?php echo $flash['type']; ?>" style="margin: 20px 20px 0;">
-                    <?php echo htmlspecialchars($flash['text']); ?>
+                    <?php echo esc($flash['text']); ?>
                 </div>
             <?php endif; ?>
 
             <!-- Modern Header (Persistent) -->
             <div class="dashboard-header-modern">
                 <div class="user-welcome">
-                    <h1>Hello, <?php echo htmlspecialchars($userProfile['business_name'] ?: $userProfile['name']); ?>! 👋</h1>
+                    <h1>Hello, <?php echo esc($userProfile['business_name'] ?: $userProfile['name']); ?>! 👋</h1>
                     <p>Manage your restaurant and orders</p>
                 </div>
                 <div class="profile-icon-large">
@@ -288,7 +288,7 @@ if ($view === 'messages') {
                                     <div class="order-vendor-info">
                                         <h3>Order #<?php echo $order['id']; ?></h3>
                                         <p class="order-date"><?php echo formatDateTime($order['created_at']); ?></p>
-                                        <p style="color: var(--gray-600); font-size: 0.9rem;">Customer: <?php echo htmlspecialchars($order['customer_name']); ?></p>
+                                        <p style="color: var(--gray-600); font-size: 0.9rem;">Customer: <?php echo esc($order['customer_name']); ?></p>
                                     </div>
                                     <span class="status-badge status-<?php echo $order['status']; ?>">
                                         <?php echo ucfirst($order['status']); ?>
@@ -354,7 +354,7 @@ if ($view === 'messages') {
                             <div class="dish-card" style="width: 100%;">
                                 <div class="dish-image-container">
                                     <?php if ($product['image']): ?>
-                                        <img src="<?php echo getProductImage($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" class="dish-image">
+                                        <img src="<?php echo getProductImage($product['image']); ?>" alt="<?php echo esc($product['name']); ?>" class="dish-image">
                                     <?php else: ?>
                                         <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 3rem;">🍽️</div>
                                     <?php endif; ?>
@@ -364,10 +364,10 @@ if ($view === 'messages') {
                                 </div>
                                 <div class="dish-info">
                                     <div class="dish-header">
-                                        <h3 class="dish-name"><?php echo htmlspecialchars($product['name']); ?></h3>
+                                        <h3 class="dish-name"><?php echo esc($product['name']); ?></h3>
                                         <div class="dish-price"><?php echo formatCurrency($product['price']); ?></div>
                                     </div>
-                                    <p class="dish-description"><?php echo htmlspecialchars(truncate($product['description'], 80)); ?></p>
+                                    <p class="dish-description"><?php echo esc(truncate($product['description'], 80)); ?></p>
                                     <div style="display: flex; gap: 10px; margin-top: 15px;">
                                         <a href="product-form.php?id=<?php echo $product['id']; ?>" class="order-btn" style="flex: 1; text-align: center; text-decoration: none; background: #FFF5F8; color: #FF6B9D;">Edit</a>
                                         <button class="order-btn" style="flex: 1; background: <?php echo ($product['is_available'] ?? true) ? '#48BB78' : '#EF4444'; ?>; color: white;">
@@ -424,23 +424,23 @@ if ($view === 'messages') {
                                 
                                 <div class="form-group-modern">
                                     <label>Business Name</label>
-                                    <input type="text" name="business_name" value="<?php echo htmlspecialchars($userProfile['business_name'] ?? ''); ?>" required class="form-control-modern">
+                                    <input type="text" name="business_name" value="<?php echo esc($userProfile['business_name'] ?? ''); ?>" required class="form-control-modern">
                                 </div>
                                 
                                 <div class="form-group-modern">
                                     <label>Email</label>
-                                    <input type="email" value="<?php echo htmlspecialchars($userProfile['email']); ?>" readonly class="form-control-modern">
+                                    <input type="email" value="<?php echo esc($userProfile['email']); ?>" readonly class="form-control-modern">
                                     <small style="color: #A0AEC0; margin-top: 4px; display: block;">Email cannot be changed</small>
                                 </div>
                                 
                                 <div class="form-group-modern">
                                     <label>Phone Number</label>
-                                    <input type="tel" name="phone" value="<?php echo htmlspecialchars($userProfile['phone'] ?? ''); ?>" class="form-control-modern" placeholder="e.g. 09123456789">
+                                    <input type="tel" name="phone" value="<?php echo esc($userProfile['phone'] ?? ''); ?>" class="form-control-modern" placeholder="e.g. 09123456789">
                                 </div>
                                 
                                 <div class="form-group-modern">
                                     <label>Business Address</label>
-                                    <textarea name="address" class="form-control-modern" rows="3" placeholder="Enter your business address"><?php echo htmlspecialchars($userProfile['address'] ?? ''); ?></textarea>
+                                    <textarea name="address" class="form-control-modern" rows="3" placeholder="Enter your business address"><?php echo esc($userProfile['address'] ?? ''); ?></textarea>
                                 </div>
                                 
                                 <button type="submit" class="btn-save">Save Changes</button>
@@ -475,11 +475,11 @@ if ($view === 'messages') {
                                         </div>
                                         <div class="chat-info">
                                             <div class="chat-name-row">
-                                                <span class="chat-name"><?php echo htmlspecialchars($conv['contact_name']); ?></span>
+                                                <span class="chat-name"><?php echo esc($conv['contact_name']); ?></span>
                                                 <span class="chat-time"><?php echo date('h:i A', strtotime($conv['last_message_time'])); ?></span>
                                             </div>
                                             <div class="chat-preview" style="<?php echo $conv['unread_count'] > 0 ? 'font-weight: 700; color: #2D3748;' : ''; ?>">
-                                                <?php echo htmlspecialchars($conv['last_message']); ?>
+                                                <?php echo esc($conv['last_message']); ?>
                                             </div>
                                         </div>
                                     </a>
@@ -497,7 +497,7 @@ if ($view === 'messages') {
                                         <?php echo strtoupper(substr($activeChatUser['name'], 0, 1)); ?>
                                     </div>
                                     <div>
-                                        <div style="font-weight: 700;"><?php echo htmlspecialchars($activeChatUser['name']); ?></div>
+                                        <div style="font-weight: 700;"><?php echo esc($activeChatUser['name']); ?></div>
                                         <div style="font-size: 0.75rem; color: #48BB78;">Online</div>
                                     </div>
                                 </div>
@@ -505,7 +505,7 @@ if ($view === 'messages') {
                                 <div class="chat-messages-area" id="chatMessages">
                                     <?php foreach ($activeMessages as $msg): ?>
                                     <div class="message-bubble <?php echo $msg['sender_id'] == $userId ? 'sent' : 'received'; ?>">
-                                        <?php echo htmlspecialchars($msg['message']); ?>
+                                        <?php echo esc($msg['message']); ?>
                                         <div class="message-time-stamp"><?php echo date('h:i A', strtotime($msg['created_at'])); ?></div>
                                     </div>
                                     <?php endforeach; ?>
@@ -549,3 +549,4 @@ if ($view === 'messages') {
     </div>
 </body>
 </html>
+
