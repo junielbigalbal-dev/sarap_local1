@@ -27,14 +27,26 @@ class MailService {
     private function configureSMTP() {
         try {
             // Server settings
-            // Server settings
             $this->mailer->isSMTP();
             $this->mailer->Host       = getenv('SMTP_HOST') ?: (defined('SMTP_HOST') ? SMTP_HOST : '');
             $this->mailer->SMTPAuth   = true;
             $this->mailer->Username   = getenv('SMTP_USER') ?: (defined('SMTP_USER') ? SMTP_USER : '');
             $this->mailer->Password   = getenv('SMTP_PASS') ?: (defined('SMTP_PASS') ? SMTP_PASS : '');
-            $this->mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $this->mailer->Port       = getenv('SMTP_PORT') ?: (defined('SMTP_PORT') ? SMTP_PORT : 587);
+            
+            // Get port and set encryption accordingly
+            $port = getenv('SMTP_PORT') ?: (defined('SMTP_PORT') ? SMTP_PORT : 587);
+            $this->mailer->Port = $port;
+            
+            // Use SSL for port 465, TLS for 587
+            if ($port == 465) {
+                $this->mailer->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+            } else {
+                $this->mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            }
+            
+            // Timeout settings for Render
+            $this->mailer->Timeout = 10;
+            $this->mailer->SMTPDebug = 0; // Disable debug output
 
             // Default sender
             $fromEmail = getenv('SMTP_USER') ?: (defined('SMTP_USER') ? SMTP_USER : '');
