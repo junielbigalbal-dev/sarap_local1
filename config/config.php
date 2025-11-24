@@ -6,7 +6,21 @@
 
 // Site settings
 define('SITE_NAME', 'Sarap Local');
-define('SITE_URL', $_ENV['SITE_URL'] ?? 'http://localhost/sarap_local1');
+// Dynamic SITE_URL detection
+if (isset($_ENV['SITE_URL'])) {
+    define('SITE_URL', $_ENV['SITE_URL']);
+} else {
+    $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    
+    // If running on localhost, assume subdirectory structure
+    if (strpos($host, 'localhost') !== false) {
+        define('SITE_URL', $protocol . '://' . $host . '/sarap_local1');
+    } else {
+        // For production (Render, etc.), assume root
+        define('SITE_URL', $protocol . '://' . $host);
+    }
+}
 define('SITE_EMAIL', $_ENV['SITE_EMAIL'] ?? 'noreply@saraplocal.com');
 
 // Paths
