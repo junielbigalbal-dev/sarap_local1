@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
         
         <?php if ($success): ?>
-            <div class="alert alert-success"><?php echo $success['text']; ?></div>
+            <div class="alert alert-<?php echo $success['type']; ?>"><?php echo $success['text']; ?></div>
         <?php endif; ?>
         
         <form method="POST" action="" class="auth-form">

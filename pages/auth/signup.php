@@ -55,7 +55,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 // Check if email already exists
                 if ($userModel->findByEmail($email)) {
-                    $error = 'Email already registered';
+                    setFlashMessage('You already have an account. Please log in.', 'info');
+                    redirect(SITE_URL . '/pages/auth/login.php');
                 } else {
                     try {
                         // Create user
