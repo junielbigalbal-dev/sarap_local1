@@ -1281,7 +1281,7 @@ if ($view === 'products') {
                                 </div>
                                 <div class="vendor-info">
                                     <div class="vendor-header">
-                                        <h3 class="vendor-name"><?php echo htmlspecialchars($vendor['business_name'] ?: $vendor['name']); ?></h3>
+                                        <h3 class="vendor-name"><?php echo htmlspecialchars($vendor['business_name'] ?: $vendor['name'] ?? 'Vendor'); ?></h3>
                                         <div class="rating-badge">⭐ <?php echo number_format(4.0 + (rand(0, 10) / 10), 1); ?></div>
                                     </div>
                                     <div class="vendor-meta">
