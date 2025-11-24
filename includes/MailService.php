@@ -126,12 +126,26 @@ class MailService {
         
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curlError = curl_error($ch);
         curl_close($ch);
         
         if ($httpCode >= 200 && $httpCode < 300) {
             return true;
         } else {
-            error_log("Brevo API Error: " . $response);
+            $errorMsg = "Brevo API Error (HTTP $httpCode): " . $response;
+            if ($curlError) {
+                $errorMsg .= " | cURL Error: " . $curlError;
+            }
+            error_log($errorMsg);
+            // Also echo for debugging
+            if (php_sapi_name() !== 'cli') {
+                echo "<div style='background:#ffe6e6;padding:10px;margin:10px 0;border-left:4px solid #ff0000;'>";
+                echo "<strong>Brevo API Error:</strong><br>";
+                echo "HTTP Code: $httpCode<br>";
+                echo "Response: " . htmlspecialchars($response) . "<br>";
+                if ($curlError) echo "cURL Error: " . htmlspecialchars($curlError);
+                echo "</div>";
+            }
             return false;
         }
     }
