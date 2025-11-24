@@ -1174,12 +1174,12 @@ if ($view === 'products') {
                                 
                                 <div class="form-group-modern">
                                     <label>Full Name</label>
-                                    <input type="text" name="name" value="<?php echo htmlspecialchars($userProfile['name']); ?>" required class="form-control-modern">
+                                    <input type="text" name="name" value="<?php echo htmlspecialchars($userProfile['name'] ?? ''); ?>" required class="form-control-modern">
                                 </div>
                                 
                                 <div class="form-group-modern">
                                     <label>Email</label>
-                                    <input type="email" value="<?php echo htmlspecialchars($userProfile['email']); ?>" readonly class="form-control-modern">
+                                    <input type="email" value="<?php echo htmlspecialchars($userProfile['email'] ?? ''); ?>" readonly class="form-control-modern">
                                     <small style="color: #A0AEC0; margin-top: 4px; display: block;">Email cannot be changed</small>
                                 </div>
                                 
