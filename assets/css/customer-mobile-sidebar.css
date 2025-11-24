@@ -1,0 +1,50 @@
+/* Mobile Sidebar Override - Customer Dashboard */
+/* This file ensures the sidebar is hidden off-screen on mobile */
+
+@media (max-width: 1024px) {
+
+    /* Force sidebar to be hidden off-screen on tablets and mobile */
+    .dashboard .sidebar {
+        position: fixed !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 280px !important;
+        height: 100vh !important;
+        z-index: 1001 !important;
+        transform: translateX(-100%) !important;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        background: #1a1a1a !important;
+        overflow-y: auto !important;
+    }
+
+    /* Show sidebar when mobile-open class is added */
+    .dashboard .sidebar.mobile-open {
+        transform: translateX(0) !important;
+        box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    /* Ensure main content takes full width */
+    .dashboard .main-content {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+
+    /* Sidebar overlay */
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        display: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .sidebar-overlay.active {
+        display: block;
+        opacity: 1;
+    }
+}
