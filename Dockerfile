@@ -27,5 +27,5 @@ RUN composer install --no-dev --optimize-autoloader
 # Expose port (Render will set PORT env variable)
 EXPOSE ${PORT:-10000}
 
-# Start PHP built-in server using Render's PORT
-CMD php -S 0.0.0.0:${PORT:-10000} -t .
+# Start PHP built-in server using Render's PORT with router for static files
+CMD php -S 0.0.0.0:${PORT:-10000} -t . router.php
