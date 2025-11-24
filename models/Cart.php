@@ -49,7 +49,7 @@ class Cart {
     
     public function getItems($userId) {
         $stmt = $this->pdo->prepare("
-            SELECT c.*, p.name, p.price, p.image, p.stock_quantity, p.vendor_id,
+            SELECT c.*, p.name, p.price, p.image, p.vendor_id,
                    up.business_name as vendor_name
             FROM carts c
             INNER JOIN products p ON c.product_id = p.id
