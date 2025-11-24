@@ -294,6 +294,13 @@ if ($view === 'products') {
         <!-- Main Content -->
         <main class="main-content" style="background: transparent; padding: 0;">
             
+            <!-- Mobile Navigation Bar -->
+            <div class="mobile-navbar" style="display: none;">
+                <button id="customerMobileMenuBtn" class="mobile-nav-btn">☰</button>
+                <div class="mobile-brand">Sarap Local</div>
+                <div class="mobile-profile-icon">👤</div>
+            </div>
+            
             <?php $flash = getFlashMessage(); if ($flash): ?>
                 <div class="alert alert-<?php echo $flash['type']; ?>" style="margin: 20px 20px 0;">
                     <?php echo htmlspecialchars($flash['text']); ?>
@@ -303,7 +310,6 @@ if ($view === 'products') {
             <?php if ($view === 'home'): ?>
             <!-- Modern Header (Persistent) -->
             <div class="dashboard-header-modern">
-                <button id="customerMobileMenuBtn" style="display: none; background: transparent; border: none; font-size: 1.8rem; color: white; margin-right: 15px; cursor: pointer; padding: 0;">☰</button>
                 <div class="user-welcome">
                     <h1>Hello, <?php echo htmlspecialchars(explode(' ', $user['name'] ?? '')[0] ?: 'Guest'); ?>! 👋</h1>
                     <p>What are you craving today?</p>
