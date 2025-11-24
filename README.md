@@ -225,6 +225,28 @@ To enable map features:
 - Ensure upload directories exist and are writable
 - Check PHP upload limits in `php.ini`
 
+### Missing Tables Error (PostgreSQL/Render)
+If you see errors like `SQLSTATE[42P01]: Undefined table: 7 ERROR: relation "notifications" does not exist`:
+
+**Option 1: Web-Based Migration (Easiest)**
+1. Visit: `https://your-app.onrender.com/migrate.php`
+2. Click "Run Migration" button
+3. Verify all tables are created
+
+**Option 2: Command Line**
+```bash
+php setup-database.php
+```
+
+**Option 3: Manual SQL**
+1. Access your PostgreSQL database
+2. Run the SQL from `sql/schema-postgresql.sql`
+
+This creates all required tables including:
+- users, user_profiles, categories, products
+- orders, order_items, carts
+- messages, notifications, email_verifications
+
 ## Development Roadmap
 
 ### Phase 1 (Current)
