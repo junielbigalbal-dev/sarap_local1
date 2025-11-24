@@ -127,7 +127,7 @@ $stmt = $pdo->query("
     LEFT JOIN user_profiles up ON u.id = up.user_id
     LEFT JOIN orders o ON u.id = o.vendor_id AND o.status = 'completed'
     WHERE u.role = 'vendor'
-    GROUP BY u.id
+    GROUP BY u.id, u.email, up.business_name, up.name
     ORDER BY total_sales DESC
     LIMIT 5
 ");
