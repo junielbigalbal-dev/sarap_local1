@@ -86,9 +86,11 @@ class Cart {
     
     public function clearByVendor($userId, $vendorId) {
         $stmt = $this->pdo->prepare("
-            DELETE c FROM carts c
-            INNER JOIN products p ON c.product_id = p.id
-            WHERE c.user_id = ? AND p.vendor_id = ?
+            DELETE FROM carts
+            USING products
+            WHERE carts.product_id = products.id 
+            AND carts.user_id = ? 
+            AND products.vendor_id = ?
         ");
         return $stmt->execute([$userId, $vendorId]);
     }

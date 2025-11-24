@@ -18,6 +18,7 @@ try {
     echo "- products\n";
     echo "- orders\n";
     echo "- order_items\n";
+    echo "- carts\n";
     echo "- messages\n";
     echo "- email_verifications\n\n";
     echo "Default admin user created:\n";
