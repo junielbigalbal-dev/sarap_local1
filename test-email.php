@@ -37,6 +37,10 @@ if (isset($_POST['send_test'])) {
     } else {
         echo "<hr><h2>Sending Test Email...</h2>";
         
+        // Enable error reporting temporarily
+        ini_set('display_errors', 1);
+        error_reporting(E_ALL);
+        
         $mailService = new MailService();
         $subject = "Test Email from Sarap Local";
         $body = "
@@ -52,7 +56,12 @@ if (isset($_POST['send_test'])) {
             echo "<p class='info'>Check your inbox (and spam folder)</p>";
         } else {
             echo "<p class='error'>❌ Failed to send email</p>";
-            echo "<p class='error'>Check error logs for details</p>";
+            echo "<p class='info'>Debugging info:</p>";
+            echo "<pre style='background:#f5f5f5;padding:10px;overflow:auto;'>";
+            echo "BREVO_API_KEY present: " . (getenv('BREVO_API_KEY') ? 'YES' : 'NO') . "\n";
+            echo "SMTP_USER: " . getenv('SMTP_USER') . "\n";
+            echo "Test email: " . htmlspecialchars($testEmail) . "\n";
+            echo "</pre>";
         }
     }
 }
