@@ -501,3 +501,41 @@ window.adminUtils = {
     previewImage,
     copyToClipboard
 };
+
+// Mobile Swipe Gesture Support
+if (window.innerWidth <= 1024) {
+    let touchStartX = 0;
+    let touchEndX = 0;
+    let touchStartY = 0;
+    let touchEndY = 0;
+
+    document.addEventListener('touchstart', function (e) {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+
+    document.addEventListener('touchend', function (e) {
+        touchEndX = e.changedTouches[0].screenX;
+        touchEndY = e.changedTouches[0].screenY;
+        handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+        const sidebar = document.querySelector('.admin-sidebar');
+        const swipeThreshold = 50;
+        const horizontalSwipe = Math.abs(touchEndX - touchStartX);
+        const verticalSwipe = Math.abs(touchEndY - touchStartY);
+
+        // Only handle horizontal swipes (ignore vertical scrolling)
+        if (horizontalSwipe > verticalSwipe && horizontalSwipe > swipeThreshold) {
+            // Swipe right from left edge to open
+            if (touchEndX > touchStartX && touchStartX < 50 && !sidebar.classList.contains('mobile-open')) {
+                toggleSidebar();
+            }
+            // Swipe left to close
+            else if (touchEndX < touchStartX && sidebar.classList.contains('mobile-open')) {
+                toggleSidebar();
+            }
+        }
+    }
+}
