@@ -304,7 +304,7 @@ if ($view === 'products') {
             <!-- Modern Header (Persistent) -->
             <div class="dashboard-header-modern">
                 <div class="user-welcome">
-                    <h1>Hello, <?php echo htmlspecialchars(explode(' ', $user['name'])[0]); ?>! 👋</h1>
+                    <h1>Hello, <?php echo htmlspecialchars(explode(' ', $user['name'] ?? 'Guest')[0]); ?>! 👋</h1>
                     <p>What are you craving today?</p>
                 </div>
                 <div class="profile-icon-large">
