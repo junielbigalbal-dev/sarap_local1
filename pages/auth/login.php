@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="auth-container">
         <div class="auth-logo">
-            <img src="<?php echo SITE_URL; ?>/frontend/public/assets/logo.png" alt="<?php echo SITE_NAME; ?>">
+            <img src="<?php echo SITE_URL; ?>/images/S.png" alt="<?php echo SITE_NAME; ?>">
             <h1>Welcome Back!</h1>
             <p>Login to continue your foodie journey</p>
         </div>

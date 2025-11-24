@@ -42,7 +42,7 @@ $categories = [
     <nav class="navbar-modern">
         <div class="container-fluid">
             <div class="navbar-brand">
-                <img src="<?php echo SITE_URL; ?>/frontend/public/assets/logo.png" alt="<?php echo SITE_NAME; ?>" class="logo">
+                <img src="<?php echo SITE_URL; ?>/images/S.png" alt="<?php echo SITE_NAME; ?>" class="logo">
                 <span class="brand-name"><?php echo SITE_NAME; ?></span>
             </div>
             <div class="navbar-actions">
@@ -235,7 +235,7 @@ $categories = [
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col">
-                    <img src="<?php echo SITE_URL; ?>/frontend/public/assets/logo.png" alt="<?php echo SITE_NAME; ?>" class="footer-logo">
+                    <img src="<?php echo SITE_URL; ?>/images/S.png" alt="<?php echo SITE_NAME; ?>" class="footer-logo">
                     <p class="footer-tagline">Biliran's favorite food delivery service</p>
                     <div class="social-links">
                         <a href="#" class="social-icon">📘</a>

@@ -94,7 +94,7 @@ $user = $_SESSION['user_data'];
     <div class="dashboard">
         <aside class="sidebar">
             <div class="sidebar-logo">
-                <img src="<?php echo SITE_URL; ?>/frontend/public/assets/logo.png" alt="<?php echo SITE_NAME; ?>">
+                <img src="<?php echo SITE_URL; ?>/images/S.png" alt="<?php echo SITE_NAME; ?>">
                 <h3><?php echo SITE_NAME; ?></h3>
             </div>
             <ul class="sidebar-menu">

@@ -28,7 +28,7 @@ try {
 <aside class="admin-sidebar">
     <div class="sidebar-header">
         <div class="sidebar-logo">
-            <img src="<?php echo SITE_URL; ?>/frontend/public/assets/logo.png" alt="<?php echo SITE_NAME; ?>">
+            <img src="<?php echo SITE_URL; ?>/images/S.png" alt="<?php echo SITE_NAME; ?>">
         </div>
         <div class="sidebar-brand">
             <h2><?php echo SITE_NAME; ?></h2>
