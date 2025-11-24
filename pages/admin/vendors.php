@@ -90,6 +90,7 @@ while ($row = $stmt->fetch()) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vendor Management - <?php echo SITE_NAME; ?></title>
     <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/admin-layout.css">
+    <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/admin-mobile-fix.css">
 </head>
 <body>
     <div class="admin-dashboard">

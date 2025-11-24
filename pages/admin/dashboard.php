@@ -123,6 +123,7 @@ $topVendors = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - <?php echo SITE_NAME; ?></title>
     <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/admin-layout.css">
+    <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/admin-mobile-fix.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         .activity-item {

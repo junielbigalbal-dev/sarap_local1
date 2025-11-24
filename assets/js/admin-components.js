@@ -46,7 +46,7 @@ function initCharts() {
                     y: {
                         beginAtZero: true,
                         ticks: {
-                            callback: function(value) {
+                            callback: function (value) {
                                 return '₱' + value.toLocaleString();
                             }
                         }
@@ -129,7 +129,7 @@ function closeModal(modalId) {
 }
 
 // Close modal on overlay click
-document.addEventListener('click', function(e) {
+document.addEventListener('click', function (e) {
     if (e.target.classList.contains('modal-overlay')) {
         closeModal(e.target.id);
     }
@@ -139,9 +139,19 @@ document.addEventListener('click', function(e) {
 function toggleSidebar() {
     const sidebar = document.querySelector('.admin-sidebar');
     const main = document.querySelector('.admin-main');
-    
+
     if (window.innerWidth <= 1024) {
         sidebar.classList.toggle('mobile-open');
+
+        // Handle overlay
+        let overlay = document.querySelector('.sidebar-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.className = 'sidebar-overlay';
+            overlay.addEventListener('click', toggleSidebar);
+            document.body.appendChild(overlay);
+        }
+        overlay.classList.toggle('active');
     } else {
         sidebar.classList.toggle('collapsed');
         main.classList.toggle('sidebar-collapsed');
@@ -151,16 +161,16 @@ function toggleSidebar() {
 // Search Functionality
 function initSearch() {
     const searchInputs = document.querySelectorAll('[data-search-table]');
-    
+
     searchInputs.forEach(input => {
         const tableId = input.dataset.searchTable;
         const table = document.getElementById(tableId);
-        
+
         if (table) {
-            input.addEventListener('input', function() {
+            input.addEventListener('input', function () {
                 const searchTerm = this.value.toLowerCase();
                 const rows = table.querySelectorAll('tbody tr');
-                
+
                 rows.forEach(row => {
                     const text = row.textContent.toLowerCase();
                     row.style.display = text.includes(searchTerm) ? '' : 'none';
@@ -174,13 +184,13 @@ function initSearch() {
 function filterTable(tableId, column, value) {
     const table = document.getElementById(tableId);
     if (!table) return;
-    
+
     const rows = table.querySelectorAll('tbody tr');
-    
+
     rows.forEach(row => {
         const cell = row.cells[column];
         if (!cell) return;
-        
+
         if (value === 'all' || cell.textContent.toLowerCase().includes(value.toLowerCase())) {
             row.style.display = '';
         } else {
@@ -193,27 +203,27 @@ function filterTable(tableId, column, value) {
 function submitForm(formId, successCallback) {
     const form = document.getElementById(formId);
     if (!form) return;
-    
-    form.addEventListener('submit', async function(e) {
+
+    form.addEventListener('submit', async function (e) {
         e.preventDefault();
-        
+
         const formData = new FormData(form);
         const submitBtn = form.querySelector('[type="submit"]');
-        
+
         // Disable submit button
         if (submitBtn) {
             submitBtn.disabled = true;
             submitBtn.textContent = 'Processing...';
         }
-        
+
         try {
             const response = await fetch(form.action, {
                 method: 'POST',
                 body: formData
             });
-            
+
             const result = await response.json();
-            
+
             if (result.success) {
                 showAlert('success', result.message || 'Operation successful!');
                 if (successCallback) successCallback(result);
@@ -236,16 +246,16 @@ function submitForm(formId, successCallback) {
 // Show Alert
 function showAlert(type, message) {
     const alertContainer = document.getElementById('alertContainer') || createAlertContainer();
-    
+
     const alert = document.createElement('div');
     alert.className = `alert alert-${type}`;
     alert.innerHTML = `
         <span>${message}</span>
         <button onclick="this.parentElement.remove()" style="background:none;border:none;cursor:pointer;margin-left:auto;font-size:1.25rem;">&times;</button>
     `;
-    
+
     alertContainer.appendChild(alert);
-    
+
     // Auto remove after 5 seconds
     setTimeout(() => {
         alert.remove();
@@ -272,7 +282,7 @@ async function deleteItem(endpoint, id, itemName = 'item') {
     if (!confirm(`Are you sure you want to delete this ${itemName}?`)) {
         return;
     }
-    
+
     try {
         const response = await fetch(endpoint, {
             method: 'POST',
@@ -281,9 +291,9 @@ async function deleteItem(endpoint, id, itemName = 'item') {
             },
             body: JSON.stringify({ id: id, action: 'delete' })
         });
-        
+
         const result = await response.json();
-        
+
         if (result.success) {
             showAlert('success', `${itemName} deleted successfully!`);
             // Reload page or remove row
@@ -307,9 +317,9 @@ async function updateStatus(endpoint, id, status) {
             },
             body: JSON.stringify({ id: id, status: status })
         });
-        
+
         const result = await response.json();
-        
+
         if (result.success) {
             showAlert('success', 'Status updated successfully!');
             setTimeout(() => location.reload(), 1000);
@@ -326,10 +336,10 @@ async function updateStatus(endpoint, id, status) {
 function exportTableToCSV(tableId, filename = 'export.csv') {
     const table = document.getElementById(tableId);
     if (!table) return;
-    
+
     let csv = [];
     const rows = table.querySelectorAll('tr');
-    
+
     rows.forEach(row => {
         const cols = row.querySelectorAll('td, th');
         const rowData = Array.from(cols).map(col => {
@@ -337,7 +347,7 @@ function exportTableToCSV(tableId, filename = 'export.csv') {
         });
         csv.push(rowData.join(','));
     });
-    
+
     // Download CSV
     const csvContent = csv.join('\n');
     const blob = new Blob([csvContent], { type: 'text/csv' });
@@ -416,15 +426,15 @@ function initDataTables() {
 function previewImage(input, previewId) {
     const preview = document.getElementById(previewId);
     if (!preview) return;
-    
+
     if (input.files && input.files[0]) {
         const reader = new FileReader();
-        
-        reader.onload = function(e) {
+
+        reader.onload = function (e) {
             preview.src = e.target.result;
             preview.style.display = 'block';
         };
-        
+
         reader.readAsDataURL(input.files[0]);
     }
 }
@@ -439,30 +449,34 @@ function copyToClipboard(text) {
 }
 
 // Initialize on DOM Load
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Initialize charts if Chart.js is loaded
     if (typeof Chart !== 'undefined') {
         initCharts();
     }
-    
+
     // Initialize search
     initSearch();
-    
+
     // Initialize DataTables
     initDataTables();
-    
+
     // Mobile menu toggle
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     if (mobileMenuBtn) {
         mobileMenuBtn.addEventListener('click', toggleSidebar);
     }
-    
+
     // Close mobile sidebar on link click
     if (window.innerWidth <= 1024) {
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', () => {
                 const sidebar = document.querySelector('.admin-sidebar');
+                const overlay = document.querySelector('.sidebar-overlay');
                 sidebar.classList.remove('mobile-open');
+                if (overlay) {
+                    overlay.classList.remove('active');
+                }
             });
         });
     }
