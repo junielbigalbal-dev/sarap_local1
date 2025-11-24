@@ -16,8 +16,8 @@ class Product {
      */
     public function create($vendorId, $data) {
         $stmt = $this->pdo->prepare("
-            INSERT INTO products (vendor_id, name, description, price, category, image, stock_quantity, status)
-            VALUES (?, ?, ?, ?, ?, ?, ?, 'pending')
+            INSERT INTO products (vendor_id, name, description, price, category_id, image, status)
+            VALUES (?, ?, ?, ?, ?, ?, 'pending')
         ");
         
         $stmt->execute([
@@ -25,9 +25,8 @@ class Product {
             $data['name'],
             $data['description'] ?? null,
             $data['price'],
-            $data['category'] ?? null,
-            $data['image'] ?? null,
-            $data['stock_quantity'] ?? 0
+            $data['category_id'] ?? null,
+            $data['image'] ?? null
         ]);
         
         return $this->pdo->lastInsertId();
@@ -95,12 +94,13 @@ class Product {
         $limit = (int)$limit;
         
         $stmt = $this->pdo->prepare("
-            SELECT p.*, up.business_name as vendor_name
+            SELECT p.*, up.business_name as vendor_name, c.name as category_name
             FROM products p
             INNER JOIN users u ON p.vendor_id = u.id
             LEFT JOIN user_profiles up ON u.id = up.user_id
+            LEFT JOIN categories c ON p.category_id = c.id
             WHERE p.status = 'active' 
-              AND (p.name LIKE ? OR p.description LIKE ? OR p.category LIKE ?)
+              AND (p.name LIKE ? OR p.description LIKE ? OR c.name LIKE ?)
             ORDER BY p.created_at DESC
             LIMIT $limit
         ");
@@ -117,7 +117,7 @@ class Product {
         $fields = [];
         $values = [];
         
-        $allowedFields = ['name', 'description', 'price', 'category', 'image', 'stock_quantity', 'status'];
+        $allowedFields = ['name', 'description', 'price', 'category_id', 'image', 'status'];
         
         foreach ($allowedFields as $field) {
             if (isset($data[$field])) {
@@ -151,11 +151,12 @@ class Product {
         $limit = (int)$limit;
         
         $stmt = $this->pdo->prepare("
-            SELECT p.*, up.business_name as vendor_name
+            SELECT p.*, up.business_name as vendor_name, c.name as category_name
             FROM products p
             INNER JOIN users u ON p.vendor_id = u.id
             LEFT JOIN user_profiles up ON u.id = up.user_id
-            WHERE p.category = ? AND p.status = 'active'
+            LEFT JOIN categories c ON p.category_id = c.id
+            WHERE c.name = ? AND p.status = 'active'
             ORDER BY p.created_at DESC
             LIMIT $limit
         ");
