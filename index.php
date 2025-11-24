@@ -118,11 +118,11 @@ $categories = [
                         <div class="vendor-badge">⭐ 4.8</div>
                     </div>
                     <div class="vendor-info">
-                        <h3 class="vendor-name"><?php echo htmlspecialchars($vendor['business_name'] ?: $vendor['name']); ?></h3>
+                        <h3 class="vendor-name"><?php echo esc($vendor['business_name'] ?: $vendor['name']); ?></h3>
                         <p class="vendor-meta">
                             <span class="vendor-cuisine">Filipino</span>
                             <span class="vendor-dot">•</span>
-                            <span class="vendor-location"><?php echo htmlspecialchars($vendor['address'] ?: 'Biliran'); ?></span>
+                            <span class="vendor-location"><?php echo esc($vendor['address'] ?? 'Biliran'); ?></span>
                         </p>
                         <div class="vendor-footer">
                             <span class="delivery-time">⚡ 20-30 min</span>
