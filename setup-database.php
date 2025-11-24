@@ -20,6 +20,7 @@ try {
     echo "- order_items\n";
     echo "- carts\n";
     echo "- messages\n";
+    echo "- notifications\n";
     echo "- email_verifications\n\n";
     echo "Default admin user created:\n";
     echo "Email: admin@saraplocal.com\n";

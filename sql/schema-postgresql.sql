@@ -108,6 +108,18 @@ CREATE TABLE IF NOT EXISTS messages (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Notifications table
+CREATE TABLE IF NOT EXISTS notifications (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    type VARCHAR(50) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    message TEXT NOT NULL,
+    link VARCHAR(255),
+    is_read BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Email verifications
 CREATE TABLE IF NOT EXISTS email_verifications (
     id SERIAL PRIMARY KEY,
@@ -128,6 +140,7 @@ CREATE INDEX IF NOT EXISTS idx_messages_sender ON messages(sender_id);
 CREATE INDEX IF NOT EXISTS idx_messages_receiver ON messages(receiver_id);
 CREATE INDEX IF NOT EXISTS idx_carts_user ON carts(user_id);
 CREATE INDEX IF NOT EXISTS idx_carts_product ON carts(product_id);
+CREATE INDEX IF NOT EXISTS idx_notifications_user ON notifications(user_id);
 
 -- Insert default categories
 INSERT INTO categories (name, description, icon) VALUES
