@@ -42,28 +42,38 @@ class Message {
     
     public function getConversations($userId) {
         $stmt = $this->pdo->prepare("
-            SELECT DISTINCT 
-                CASE WHEN m.sender_id = ? THEN m.receiver_id ELSE m.sender_id END as contact_id,
+            SELECT 
+                c.contact_id,
                 up.name as contact_name,
                 up.business_name,
                 u.role as contact_role,
-                (SELECT message FROM messages 
-                 WHERE (sender_id = ? AND receiver_id = contact_id) 
-                    OR (sender_id = contact_id AND receiver_id = ?)
-                 ORDER BY created_at DESC LIMIT 1) as last_message,
-                (SELECT created_at FROM messages 
-                 WHERE (sender_id = ? AND receiver_id = contact_id) 
-                    OR (sender_id = contact_id AND receiver_id = ?)
-                 ORDER BY created_at DESC LIMIT 1) as last_message_time,
-                (SELECT COUNT(*) FROM messages 
-                 WHERE sender_id = contact_id AND receiver_id = ? AND is_read = FALSE) as unread_count
-            FROM messages m
-            INNER JOIN users u ON (CASE WHEN m.sender_id = ? THEN m.receiver_id ELSE m.sender_id END) = u.id
+                (SELECT message FROM messages m2
+                 WHERE (m2.sender_id = ? AND m2.receiver_id = c.contact_id) 
+                    OR (m2.sender_id = c.contact_id AND m2.receiver_id = ?)
+                 ORDER BY m2.created_at DESC LIMIT 1) as last_message,
+                (SELECT created_at FROM messages m3
+                 WHERE (m3.sender_id = ? AND m3.receiver_id = c.contact_id) 
+                    OR (m3.sender_id = c.contact_id AND m3.receiver_id = ?)
+                 ORDER BY m3.created_at DESC LIMIT 1) as last_message_time,
+                (SELECT COUNT(*) FROM messages m4
+                 WHERE m4.sender_id = c.contact_id AND m4.receiver_id = ? AND m4.is_read = FALSE) as unread_count
+            FROM (
+                SELECT DISTINCT 
+                    CASE WHEN sender_id = ? THEN receiver_id ELSE sender_id END as contact_id
+                FROM messages
+                WHERE sender_id = ? OR receiver_id = ?
+            ) c
+            INNER JOIN users u ON c.contact_id = u.id
             LEFT JOIN user_profiles up ON u.id = up.user_id
-            WHERE m.sender_id = ? OR m.receiver_id = ?
             ORDER BY last_message_time DESC
         ");
-        $stmt->execute([$userId, $userId, $userId, $userId, $userId, $userId, $userId, $userId, $userId]);
+        $stmt->execute([
+            $userId, $userId, // Subquery 1
+            $userId, $userId, // Subquery 2
+            $userId,          // Subquery 3
+            $userId,          // Derived table CASE
+            $userId, $userId  // Derived table WHERE
+        ]);
         return $stmt->fetchAll();
     }
     
