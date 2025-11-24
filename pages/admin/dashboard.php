@@ -13,6 +13,10 @@ $userModel = new User($pdo);
 $productModel = new Product($pdo);
 $orderModel = new Order($pdo);
 
+// Detect database driver for cross-compatibility
+$isPgsql = $pdo->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql';
+$totalCol = $isPgsql ? 'total_amount' : 'total';
+
 // Get current user info
 $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->execute([$_SESSION['user_id']]);
@@ -26,7 +30,7 @@ $stmt = $pdo->query("SELECT COUNT(*) as count FROM orders");
 $stats['total_orders'] = $stmt->fetch()['count'];
 
 // Total Revenue
-$stmt = $pdo->query("SELECT SUM(total) as total FROM orders WHERE status = 'completed'");
+$stmt = $pdo->query("SELECT SUM($totalCol) as total FROM orders WHERE status = 'completed'");
 $stats['total_revenue'] = $stmt->fetch()['total'] ?? 0;
 
 // Active Vendors
@@ -45,11 +49,11 @@ $pendingProducts = $stmt->fetch()['count'];
 $stats['pending_approvals'] = $pendingVendors + $pendingProducts;
 
 // Today's Orders
-$stmt = $pdo->query("SELECT COUNT(*) as count FROM orders WHERE DATE(created_at) = CURDATE()");
+$stmt = $pdo->query("SELECT COUNT(*) as count FROM orders WHERE CAST(created_at AS DATE) = CURRENT_DATE");
 $stats['today_orders'] = $stmt->fetch()['count'];
 
 // Today's Revenue
-$stmt = $pdo->query("SELECT SUM(total) as total FROM orders WHERE DATE(created_at) = CURDATE() AND status = 'completed'");
+$stmt = $pdo->query("SELECT SUM($totalCol) as total FROM orders WHERE CAST(created_at AS DATE) = CURRENT_DATE AND status = 'completed'");
 $stats['today_revenue'] = $stmt->fetch()['total'] ?? 0;
 
 // Average Order Value
@@ -87,16 +91,29 @@ $stmt = $pdo->query("
 $activityLog = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Monthly Revenue Data (for chart)
-$stmt = $pdo->query("
-    SELECT 
-        DATE_FORMAT(created_at, '%Y-%m') as month,
-        SUM(total) as revenue
-    FROM orders
-    WHERE status = 'completed'
-    AND created_at >= DATE_SUB(NOW(), INTERVAL 12 MONTH)
-    GROUP BY DATE_FORMAT(created_at, '%Y-%m')
-    ORDER BY month ASC
-");
+if ($isPgsql) {
+    $stmt = $pdo->query("
+        SELECT 
+            TO_CHAR(created_at, 'YYYY-MM') as month,
+            SUM($totalCol) as revenue
+        FROM orders
+        WHERE status = 'completed'
+        AND created_at >= CURRENT_DATE - INTERVAL '12 months'
+        GROUP BY TO_CHAR(created_at, 'YYYY-MM')
+        ORDER BY month ASC
+    ");
+} else {
+    $stmt = $pdo->query("
+        SELECT 
+            DATE_FORMAT(created_at, '%Y-%m') as month,
+            SUM($totalCol) as revenue
+        FROM orders
+        WHERE status = 'completed'
+        AND created_at >= DATE_SUB(NOW(), INTERVAL 12 MONTH)
+        GROUP BY DATE_FORMAT(created_at, '%Y-%m')
+        ORDER BY month ASC
+    ");
+}
 $monthlyRevenue = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Top Vendors
@@ -105,7 +122,7 @@ $stmt = $pdo->query("
         u.id, u.email, 
         COALESCE(up.business_name, up.name, u.email) as name,
         COUNT(o.id) as order_count,
-        SUM(o.total) as total_sales
+        SUM(o.$totalCol) as total_sales
     FROM users u
     LEFT JOIN user_profiles up ON u.id = up.user_id
     LEFT JOIN orders o ON u.id = o.vendor_id AND o.status = 'completed'
@@ -340,7 +357,7 @@ $topVendors = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <td><strong>#<?php echo $order['id']; ?></strong></td>
                                         <td><?php echo htmlspecialchars($order['customer_email'] ?? 'N/A'); ?></td>
                                         <td><?php echo htmlspecialchars($order['vendor_email'] ?? 'N/A'); ?></td>
-                                        <td><strong><?php echo formatCurrency($order['total']); ?></strong></td>
+                                        <td><strong><?php echo formatCurrency($order[$totalCol]); ?></strong></td>
                                         <td>
                                             <?php
                                             $statusColors = [
