@@ -62,7 +62,7 @@ if ($searchQuery) {
     $sql .= " AND (u.email LIKE :search OR u.name LIKE :search)";
 }
 
-$sql .= " GROUP BY u.id ORDER BY u.created_at DESC";
+$sql .= " GROUP BY u.id, up.business_name, up.name ORDER BY u.created_at DESC";
 
 $stmt = $pdo->prepare($sql);
 
