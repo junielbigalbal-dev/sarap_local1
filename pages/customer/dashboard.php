@@ -1474,21 +1474,36 @@ if ($view === 'products') {
     </div>
     <script src="<?php echo SITE_URL; ?>/assets/js/admin-components.js"></script>
     <script>
-        // Show mobile navbar on small screens
-        if (window.innerWidth <= 768) {
+        // Mobile navbar visibility
+        function updateMobileNavbar() {
             const mobileNavbar = document.querySelector('.mobile-navbar');
             if (mobileNavbar) {
-                mobileNavbar.style.display = 'flex';
+                if (window.innerWidth <= 768) {
+                    mobileNavbar.style.display = 'flex';
+                } else {
+                    mobileNavbar.style.display = 'none';
+                }
             }
         }
         
-        // Mobile menu button handler
-        const mobileMenuBtn = document.getElementById('customerMobileMenuBtn');
-        if (mobileMenuBtn) {
-            mobileMenuBtn.addEventListener('click', function() {
-                toggleSidebar();
-            });
-        }
+        // Run on load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateMobileNavbar();
+            
+            // Mobile menu button handler
+            const mobileMenuBtn = document.getElementById('customerMobileMenuBtn');
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    toggleSidebar();
+                });
+            }
+        });
+        
+        // Run on resize
+        window.addEventListener('resize', updateMobileNavbar);
+        
+        // Run immediately
+        updateMobileNavbar();
     </script>
 </body>
 </html>
