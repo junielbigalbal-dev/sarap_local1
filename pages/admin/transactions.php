@@ -48,9 +48,9 @@ $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $stmt = $pdo->prepare("
     SELECT 
         COUNT(*) as total_transactions,
-        SUM(total) as total_amount,
-        SUM(CASE WHEN status = 'completed' THEN total ELSE 0 END) as completed_amount,
-        SUM(CASE WHEN status = 'cancelled' THEN total ELSE 0 END) as cancelled_amount
+        SUM(total_amount) as total_amount,
+        SUM(CASE WHEN status = 'completed' THEN total_amount ELSE 0 END) as completed_amount,
+        SUM(CASE WHEN status = 'cancelled' THEN total_amount ELSE 0 END) as cancelled_amount
     FROM orders
     WHERE DATE(created_at) BETWEEN ? AND ?
 ");
@@ -163,7 +163,7 @@ $stats = $stmt->fetch(PDO::FETCH_ASSOC);
                                     <td><?php echo formatDateTime($transaction['created_at']); ?></td>
                                     <td><?php echo htmlspecialchars($transaction['customer_name']); ?></td>
                                     <td><?php echo htmlspecialchars($transaction['vendor_name']); ?></td>
-                                    <td><strong><?php echo formatCurrency($transaction['total']); ?></strong></td>
+                                    <td><strong><?php echo formatCurrency($transaction['total_amount']); ?></strong></td>
                                     <td>
                                         <?php
                                         $statusColors = [
