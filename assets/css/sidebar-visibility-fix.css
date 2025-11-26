@@ -1,0 +1,68 @@
+/* Customer Sidebar Visibility Fix */
+/* Ensure sidebar and all its elements are visible */
+
+.admin-sidebar {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.sidebar-nav {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.nav-section {
+    display: block !important;
+    visibility: visible !important;
+}
+
+.nav-menu {
+    display: block !important;
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.nav-item {
+    display: block !important;
+    visibility: visible !important;
+}
+
+.nav-link {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: #374151 !important;
+    /* Ensure text is visible */
+}
+
+.nav-link span {
+    display: inline-block !important;
+    visibility: visible !important;
+}
+
+.nav-icon {
+    display: inline-block !important;
+    visibility: visible !important;
+}
+
+/* Desktop - sidebar always visible */
+@media (min-width: 1025px) {
+    .admin-sidebar {
+        transform: translateX(0) !important;
+        display: flex !important;
+    }
+}
+
+/* Mobile - sidebar hidden until toggled */
+@media (max-width: 1024px) {
+    .admin-sidebar {
+        transform: translateX(-100%);
+    }
+
+    .admin-sidebar.mobile-open {
+        transform: translateX(0) !important;
+    }
+}

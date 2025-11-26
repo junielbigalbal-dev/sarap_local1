@@ -259,6 +259,7 @@ if ($view === 'products') {
     <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/master-dashboard.css?v=6">
     <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/feed-styles.css?v=7">
     <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/customer-mobile-sidebar.css?v=1">
+    <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/sidebar-visibility-fix.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
     function updateQuantity(btn, change) {
