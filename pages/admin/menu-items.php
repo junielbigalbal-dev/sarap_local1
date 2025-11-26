@@ -40,10 +40,12 @@ $sql = "
     SELECT 
         p.*,
         u.email as vendor_email,
-        COALESCE(up.business_name, up.name, u.email) as vendor_name
+        COALESCE(up.business_name, up.name, u.email) as vendor_name,
+        c.name as category_name
     FROM products p
     LEFT JOIN users u ON p.vendor_id = u.id
     LEFT JOIN user_profiles up ON u.id = up.user_id
+    LEFT JOIN categories c ON p.category_id = c.id
     WHERE 1=1
 ";
 
@@ -52,7 +54,7 @@ if ($statusFilter !== 'all') {
 }
 
 if ($categoryFilter !== 'all') {
-    $sql .= " AND p.category = :category";
+    $sql .= " AND p.category_id = :category";
 }
 
 if ($searchQuery) {
@@ -77,8 +79,8 @@ $stmt->execute();
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Get categories
-$stmt = $pdo->query("SELECT DISTINCT category FROM products WHERE category IS NOT NULL ORDER BY category");
-$categories = $stmt->fetchAll(PDO::FETCH_COLUMN);
+$stmt = $pdo->query("SELECT id, name FROM categories ORDER BY name");
+$categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Get status counts
 $stmt = $pdo->query("SELECT status, COUNT(*) as count FROM products GROUP BY status");
@@ -157,8 +159,8 @@ while ($row = $stmt->fetch()) {
                                 <select name="category" class="form-select" onchange="this.form.submit()" style="width: 150px;">
                                     <option value="all" <?php echo $categoryFilter === 'all' ? 'selected' : ''; ?>>All Categories</option>
                                     <?php foreach ($categories as $cat): ?>
-                                    <option value="<?php echo htmlspecialchars($cat); ?>" <?php echo $categoryFilter === $cat ? 'selected' : ''; ?>>
-                                        <?php echo htmlspecialchars($cat); ?>
+                                    <option value="<?php echo $cat['id']; ?>" <?php echo $categoryFilter == $cat['id'] ? 'selected' : ''; ?>>
+                                        <?php echo htmlspecialchars($cat['name']); ?>
                                     </option>
                                     <?php endforeach; ?>
                                 </select>
@@ -201,7 +203,7 @@ while ($row = $stmt->fetch()) {
                                     <td><?php echo htmlspecialchars($product['vendor_name']); ?></td>
                                     <td>
                                         <span class="badge badge-info">
-                                            <?php echo htmlspecialchars($product['category'] ?? 'Uncategorized'); ?>
+                                            <?php echo htmlspecialchars($product['category_name'] ?? 'Uncategorized'); ?>
                                         </span>
                                     </td>
                                     <td><strong><?php echo formatCurrency($product['price']); ?></strong></td>
