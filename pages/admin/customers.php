@@ -16,7 +16,7 @@ $sql = "
         up.name as customer_name,
         up.phone,
         COUNT(DISTINCT o.id) as order_count,
-        SUM(CASE WHEN o.status = 'completed' THEN o.total ELSE 0 END) as total_spent
+        SUM(CASE WHEN o.status = 'completed' THEN o.total_amount ELSE 0 END) as total_spent
     FROM users u
     LEFT JOIN user_profiles up ON u.id = up.user_id
     LEFT JOIN orders o ON u.id = o.customer_id
@@ -42,7 +42,7 @@ $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $stmt = $pdo->query("SELECT COUNT(*) as count FROM users WHERE role = 'customer'");
 $totalCustomers = $stmt->fetch()['count'];
 
-$stmt = $pdo->query("SELECT COUNT(*) as count FROM users WHERE role = 'customer' AND DATE(created_at) >= DATE_SUB(NOW(), INTERVAL 30 DAY)");
+$stmt = $pdo->query("SELECT COUNT(*) as count FROM users WHERE role = 'customer' AND created_at >= CURRENT_DATE - INTERVAL '30 days'");
 $newCustomers = $stmt->fetch()['count'];
 ?>
 <!DOCTYPE html>

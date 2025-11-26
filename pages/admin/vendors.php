@@ -45,7 +45,7 @@ $sql = "
         COALESCE(up.business_name, up.name, u.email) as vendor_name,
         COUNT(DISTINCT p.id) as product_count,
         COUNT(DISTINCT o.id) as order_count,
-        SUM(CASE WHEN o.status = 'completed' THEN o.total ELSE 0 END) as total_sales,
+        SUM(CASE WHEN o.status = 'completed' THEN o.total_amount ELSE 0 END) as total_sales,
         AVG(CASE WHEN o.status = 'completed' THEN 5 ELSE NULL END) as rating
     FROM users u
     LEFT JOIN user_profiles up ON u.id = up.user_id
