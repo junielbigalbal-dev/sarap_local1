@@ -139,6 +139,7 @@ if ($view === 'messages') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vendor Dashboard - <?php echo SITE_NAME; ?></title>
+    <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/admin-layout.css">
     <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/master-dashboard.css?v=7">
     <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/feed-styles.css?v=8">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -146,20 +147,66 @@ if ($view === 'messages') {
 <body style="background: linear-gradient(to bottom, #FFF5F8 0%, #FFFFFF 50%);">
     <div class="dashboard">
         <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-logo">
-                <img src="<?php echo SITE_URL; ?>/frontend/public/assets/logo.png" alt="<?php echo SITE_NAME; ?>">
-                <h3><?php echo SITE_NAME; ?></h3>
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <img src="<?php echo SITE_URL; ?>/images/S.png" alt="<?php echo SITE_NAME; ?>">
+                </div>
+                <div class="sidebar-brand">
+                    <h2><?php echo SITE_NAME; ?></h2>
+                    <p>Vendor Panel</p>
+                </div>
+                <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
             </div>
-            <ul class="sidebar-menu">
-                <li><a href="dashboard.php" class="<?php echo $view === 'home' ? 'active' : ''; ?>">🏠 Dashboard</a></li>
-                <li><a href="dashboard.php?view=orders" class="<?php echo $view === 'orders' ? 'active' : ''; ?>">📦 Orders</a></li>
-                <li><a href="dashboard.php?view=products" class="<?php echo $view === 'products' ? 'active' : ''; ?>">🍽️ Menu</a></li>
-                <li><a href="dashboard.php?view=analytics" class="<?php echo $view === 'analytics' ? 'active' : ''; ?>">📊 Analytics</a></li>
-                <li><a href="dashboard.php?view=messages" class="<?php echo $view === 'messages' ? 'active' : ''; ?>">💬 Messages</a></li>
-                <li><a href="dashboard.php?view=profile" class="<?php echo $view === 'profile' ? 'active' : ''; ?>">🏪 Settings</a></li>
-                <li><a href="<?php echo SITE_URL; ?>/pages/auth/logout.php">🚪 Logout</a></li>
-            </ul>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="dashboard.php" class="nav-link <?php echo $view === 'home' ? 'active' : ''; ?>">
+                                <span class="nav-icon">🏠</span>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="dashboard.php?view=orders" class="nav-link <?php echo $view === 'orders' ? 'active' : ''; ?>">
+                                <span class="nav-icon">📦</span>
+                                <span>Orders</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="dashboard.php?view=products" class="nav-link <?php echo $view === 'products' ? 'active' : ''; ?>">
+                                <span class="nav-icon">🍽️</span>
+                                <span>Menu</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="dashboard.php?view=analytics" class="nav-link <?php echo $view === 'analytics' ? 'active' : ''; ?>">
+                                <span class="nav-icon">📊</span>
+                                <span>Analytics</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="dashboard.php?view=messages" class="nav-link <?php echo $view === 'messages' ? 'active' : ''; ?>">
+                                <span class="nav-icon">💬</span>
+                                <span>Messages</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="dashboard.php?view=profile" class="nav-link <?php echo $view === 'profile' ? 'active' : ''; ?>">
+                                <span class="nav-icon">⚙️</span>
+                                <span>Settings</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?php echo SITE_URL; ?>/pages/auth/logout.php" class="nav-link">
+                                <span class="nav-icon">🚪</span>
+                                <span>Logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
         </aside>
 
         <!-- Main Content -->
@@ -547,6 +594,7 @@ if ($view === 'messages') {
             </div>
         </main>
     </div>
+    <script src="<?php echo SITE_URL; ?>/assets/js/admin-components.js"></script>
 </body>
 </html>
 
