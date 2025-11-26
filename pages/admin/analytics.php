@@ -12,7 +12,7 @@ $endDate = $_GET['end_date'] ?? date('Y-m-d');
 
 // Sales data for chart
 $stmt = $pdo->prepare("
-    SELECT DATE(created_at) as date, SUM(total) as revenue, COUNT(*) as orders
+    SELECT DATE(created_at) as date, SUM(total_amount) as revenue, COUNT(*) as orders
     FROM orders
     WHERE status = 'completed' AND DATE(created_at) BETWEEN ? AND ?
     GROUP BY DATE(created_at)
@@ -38,12 +38,12 @@ $stmt = $pdo->query("
         COALESCE(up.business_name, up.name, u.email) as name, 
         u.email, 
         COUNT(o.id) as order_count, 
-        SUM(o.total) as revenue
+        SUM(o.total_amount) as revenue
     FROM users u
     LEFT JOIN user_profiles up ON u.id = up.user_id
     LEFT JOIN orders o ON u.id = o.vendor_id AND o.status = 'completed'
     WHERE u.role = 'vendor'
-    GROUP BY u.id
+    GROUP BY u.id, up.business_name, up.name, u.email
     ORDER BY revenue DESC
     LIMIT 10
 ");
@@ -51,9 +51,9 @@ $topVendors = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Peak hours data
 $stmt = $pdo->query("
-    SELECT HOUR(created_at) as hour, COUNT(*) as order_count
+    SELECT EXTRACT(HOUR FROM created_at) as hour, COUNT(*) as order_count
     FROM orders
-    GROUP BY HOUR(created_at)
+    GROUP BY EXTRACT(HOUR FROM created_at)
     ORDER BY hour ASC
 ");
 $peakHours = $stmt->fetchAll(PDO::FETCH_ASSOC);
