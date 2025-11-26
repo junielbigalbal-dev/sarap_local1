@@ -142,6 +142,8 @@ if ($view === 'messages') {
     <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/admin-layout.css">
     <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/master-dashboard.css?v=7">
     <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/feed-styles.css?v=8">
+    <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/customer-mobile-sidebar.css?v=1">
+    <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/sidebar-visibility-fix.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body style="background: linear-gradient(to bottom, #FFF5F8 0%, #FFFFFF 50%);">
@@ -211,6 +213,13 @@ if ($view === 'messages') {
 
         <!-- Main Content -->
         <main class="main-content" style="background: transparent; padding: 0;">
+            
+            <!-- Mobile Navigation Bar -->
+            <div class="mobile-navbar" style="display: none;">
+                <button id="vendorMobileMenuBtn" class="mobile-nav-btn">☰</button>
+                <div class="mobile-brand">Sarap Local</div>
+                <div class="mobile-profile-icon">🏪</div>
+            </div>
             
             <?php $flash = getFlashMessage(); if ($flash): ?>
                 <div class="alert alert-<?php echo $flash['type']; ?>" style="margin: 20px 20px 0;">
@@ -595,6 +604,38 @@ if ($view === 'messages') {
         </main>
     </div>
     <script src="<?php echo SITE_URL; ?>/assets/js/admin-components.js"></script>
+    <script>
+        // Mobile navbar visibility
+        function updateMobileNavbar() {
+            const mobileNavbar = document.querySelector('.mobile-navbar');
+            if (mobileNavbar) {
+                if (window.innerWidth <= 768) {
+                    mobileNavbar.style.display = 'flex';
+                } else {
+                    mobileNavbar.style.display = 'none';
+                }
+            }
+        }
+        
+        // Run on load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateMobileNavbar();
+            
+            // Mobile menu button handler
+            const mobileMenuBtn = document.getElementById('vendorMobileMenuBtn');
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    toggleSidebar();
+                });
+            }
+        });
+        
+        // Run on resize
+        window.addEventListener('resize', updateMobileNavbar);
+        
+        // Run immediately
+        updateMobileNavbar();
+    </script>
 </body>
 </html>
 
