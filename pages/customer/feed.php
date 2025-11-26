@@ -106,6 +106,7 @@ if ($search) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Discover Food - <?php echo SITE_NAME; ?></title>
+    <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/admin-layout.css">
     <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/master-dashboard.css?v=6">
     <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/feed-styles.css?v=1">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -113,22 +114,109 @@ if ($search) {
 <body style="background: linear-gradient(to bottom, #FFF5F8 0%, #FFFFFF 50%);">
     <div class="dashboard">
         <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-logo">
-                <img src="<?php echo SITE_URL; ?>/images/S.png" alt="<?php echo SITE_NAME; ?>">
-                <h3><?php echo SITE_NAME; ?></h3>
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <img src="<?php echo SITE_URL; ?>/images/S.png" alt="<?php echo SITE_NAME; ?>">
+                </div>
+                <div class="sidebar-brand">
+                    <h2><?php echo SITE_NAME; ?></h2>
+                    <p>Customer Panel</p>
+                </div>
+                <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
             </div>
-            <ul class="sidebar-menu">
-                <li><a href="dashboard.php">🏠 Dashboard</a></li>
-                <li><a href="feed.php" class="active">📰 News Feed</a></li>
-                <li><a href="products.php">🍽️ Browse Products</a></li>
-                <li><a href="cart.php">🛒 Cart <?php if ($cartCount > 0) echo "($cartCount)"; ?></a></li>
-                <li><a href="orders.php">📦 My Orders</a></li>
-                <li><a href="messages.php">💬 Messages</a></li>
-                <li><a href="map.php">🗺️ Find Vendors</a></li>
-                <li><a href="profile.php">👤 Profile</a></li>
-                <li><a href="<?php echo SITE_URL; ?>/pages/auth/logout.php">🚪 Logout</a></li>
-            </ul>
+
+            <nav class="sidebar-nav">
+                <!-- Main Section -->
+                <div class="nav-section">
+                    <div class="nav-section-title">Main</div>
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="dashboard.php" class="nav-link">
+                                <span class="nav-icon">🏠</span>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="feed.php" class="nav-link active">
+                                <span class="nav-icon">📰</span>
+                                <span>News Feed</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="dashboard.php?view=products" class="nav-link">
+                                <span class="nav-icon">🍽️</span>
+                                <span>Browse Products</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="dashboard.php?view=vendors" class="nav-link">
+                                <span class="nav-icon">🗺️</span>
+                                <span>Find Vendors</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Orders Section -->
+                <div class="nav-section">
+                    <div class="nav-section-title">Orders</div>
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="dashboard.php?view=cart" class="nav-link">
+                                <span class="nav-icon">🛒</span>
+                                <span>Cart</span>
+                                <?php if ($cartCount > 0): ?>
+                                <span class="nav-badge"><?php echo $cartCount; ?></span>
+                                <?php endif; ?>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="dashboard.php?view=orders" class="nav-link">
+                                <span class="nav-icon">📦</span>
+                                <span>My Orders</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Account Section -->
+                <div class="nav-section">
+                    <div class="nav-section-title">Account</div>
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="dashboard.php?view=messages" class="nav-link">
+                                <span class="nav-icon">💬</span>
+                                <span>Messages</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="dashboard.php?view=profile" class="nav-link">
+                                <span class="nav-icon">👤</span>
+                                <span>Profile</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Other Section -->
+                <div class="nav-section">
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="<?php echo SITE_URL; ?>" class="nav-link">
+                                <span class="nav-icon">🌐</span>
+                                <span>View Site</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?php echo SITE_URL; ?>/pages/auth/logout.php" class="nav-link">
+                                <span class="nav-icon">🚪</span>
+                                <span>Logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
         </aside>
 
         <!-- Main Content -->
@@ -482,5 +570,6 @@ if ($search) {
             }
         });
     </script>
+    <script src="<?php echo SITE_URL; ?>/assets/js/admin-components.js"></script>
 </body>
 </html>

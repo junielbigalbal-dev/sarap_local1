@@ -255,6 +255,7 @@ if ($view === 'products') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - <?php echo SITE_NAME; ?></title>
+    <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/admin-layout.css">
     <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/master-dashboard.css?v=6">
     <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/feed-styles.css?v=7">
     <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/customer-mobile-sidebar.css?v=1">
@@ -274,22 +275,109 @@ if ($view === 'products') {
 <body style="background: linear-gradient(to bottom, #FFF5F8 0%, #FFFFFF 50%);">
     <div class="dashboard">
         <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-logo">
-                <img src="<?php echo SITE_URL; ?>/images/S.png" alt="<?php echo SITE_NAME; ?>">
-                <h3><?php echo SITE_NAME; ?></h3>
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <img src="<?php echo SITE_URL; ?>/images/S.png" alt="<?php echo SITE_NAME; ?>">
+                </div>
+                <div class="sidebar-brand">
+                    <h2><?php echo SITE_NAME; ?></h2>
+                    <p>Customer Panel</p>
+                </div>
+                <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
             </div>
-            <ul class="sidebar-menu">
-                <li><a href="dashboard.php" class="<?php echo $view === 'home' ? 'active' : ''; ?>">🏠 Dashboard</a></li>
-                <li><a href="feed.php">📰 News Feed</a></li>
-                <li><a href="dashboard.php?view=products" class="<?php echo $view === 'products' ? 'active' : ''; ?>">🍽️ Browse Products</a></li>
-                <li><a href="dashboard.php?view=cart" class="<?php echo $view === 'cart' ? 'active' : ''; ?>">🛒 Cart <?php if ($cartCount > 0) echo "($cartCount)"; ?></a></li>
-                <li><a href="dashboard.php?view=orders" class="<?php echo $view === 'orders' ? 'active' : ''; ?>">📦 My Orders</a></li>
-                <li><a href="dashboard.php?view=messages" class="<?php echo $view === 'messages' ? 'active' : ''; ?>">💬 Messages</a></li>
-                <li><a href="dashboard.php?view=vendors" class="<?php echo $view === 'vendors' ? 'active' : ''; ?>">🗺️ Find Vendors</a></li>
-                <li><a href="dashboard.php?view=profile" class="<?php echo $view === 'profile' ? 'active' : ''; ?>">👤 Profile</a></li>
-                <li><a href="<?php echo SITE_URL; ?>/pages/auth/logout.php">🚪 Logout</a></li>
-            </ul>
+
+            <nav class="sidebar-nav">
+                <!-- Main Section -->
+                <div class="nav-section">
+                    <div class="nav-section-title">Main</div>
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="dashboard.php" class="nav-link <?php echo $view === 'home' ? 'active' : ''; ?>">
+                                <span class="nav-icon">🏠</span>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="feed.php" class="nav-link">
+                                <span class="nav-icon">📰</span>
+                                <span>News Feed</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="dashboard.php?view=products" class="nav-link <?php echo $view === 'products' ? 'active' : ''; ?>">
+                                <span class="nav-icon">🍽️</span>
+                                <span>Browse Products</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="dashboard.php?view=vendors" class="nav-link <?php echo $view === 'vendors' ? 'active' : ''; ?>">
+                                <span class="nav-icon">🗺️</span>
+                                <span>Find Vendors</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Orders Section -->
+                <div class="nav-section">
+                    <div class="nav-section-title">Orders</div>
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="dashboard.php?view=cart" class="nav-link <?php echo $view === 'cart' ? 'active' : ''; ?>">
+                                <span class="nav-icon">🛒</span>
+                                <span>Cart</span>
+                                <?php if ($cartCount > 0): ?>
+                                <span class="nav-badge"><?php echo $cartCount; ?></span>
+                                <?php endif; ?>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="dashboard.php?view=orders" class="nav-link <?php echo $view === 'orders' ? 'active' : ''; ?>">
+                                <span class="nav-icon">📦</span>
+                                <span>My Orders</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Account Section -->
+                <div class="nav-section">
+                    <div class="nav-section-title">Account</div>
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="dashboard.php?view=messages" class="nav-link <?php echo $view === 'messages' ? 'active' : ''; ?>">
+                                <span class="nav-icon">💬</span>
+                                <span>Messages</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="dashboard.php?view=profile" class="nav-link <?php echo $view === 'profile' ? 'active' : ''; ?>">
+                                <span class="nav-icon">👤</span>
+                                <span>Profile</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Other Section -->
+                <div class="nav-section">
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="<?php echo SITE_URL; ?>" class="nav-link">
+                                <span class="nav-icon">🌐</span>
+                                <span>View Site</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?php echo SITE_URL; ?>/pages/auth/logout.php" class="nav-link">
+                                <span class="nav-icon">🚪</span>
+                                <span>Logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
         </aside>
 
         <!-- Main Content -->
@@ -1412,89 +1500,23 @@ if ($view === 'products') {
             </div>
         </main>
     </div>
+    <script src="<?php echo SITE_URL; ?>/assets/js/admin-components.js"></script>
     <script>
-        // Mobile Sidebar Toggle
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileBtn = document.getElementById('customerMobileMenuBtn');
-            const sidebar = document.querySelector('.sidebar');
-            
-            // Create overlay
-            const overlay = document.createElement('div');
-            overlay.className = 'sidebar-overlay';
-            document.body.appendChild(overlay);
-            
-            function toggleSidebar() {
-                sidebar.classList.toggle('mobile-open');
-                overlay.classList.toggle('active');
-                document.body.style.overflow = sidebar.classList.contains('mobile-open') ? 'hidden' : '';
+        // Show mobile navbar on small screens
+        if (window.innerWidth <= 768) {
+            const mobileNavbar = document.querySelector('.mobile-navbar');
+            if (mobileNavbar) {
+                mobileNavbar.style.display = 'flex';
             }
-            
-            if (mobileBtn) {
-                mobileBtn.addEventListener('click', toggleSidebar);
-            }
-            
-            overlay.addEventListener('click', toggleSidebar);
-            
-            // Close sidebar when clicking links
-            const sidebarLinks = document.querySelectorAll('.sidebar-menu a');
-            sidebarLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    if (window.innerWidth <= 768) {
-                        sidebar.classList.remove('mobile-open');
-                        overlay.classList.remove('active');
-                        document.body.style.overflow = '';
-                    }
-                });
+        }
+        
+        // Mobile menu button handler
+        const mobileMenuBtn = document.getElementById('customerMobileMenuBtn');
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', function() {
+                toggleSidebar();
             });
-            
-            // Swipe Gestures
-            let touchStartX = 0;
-            let touchEndX = 0;
-            
-            document.addEventListener('touchstart', e => {
-                touchStartX = e.changedTouches[0].screenX;
-            }, {passive: true});
-            
-            document.addEventListener('touchend', e => {
-                touchEndX = e.changedTouches[0].screenX;
-                handleSwipe();
-            }, {passive: true});
-            
-            function handleSwipe() {
-                if (window.innerWidth > 768) return;
-                
-                const swipeThreshold = 50;
-                const swipeDistance = touchEndX - touchStartX;
-                
-                // Swipe right to open
-                if (swipeDistance > swipeThreshold && touchStartX < 30) {
-                    if (!sidebar.classList.contains('mobile-open')) {
-                        toggleSidebar();
-                    }
-                }
-                
-                // Swipe left to close
-                if (swipeDistance < -swipeThreshold) {
-                    if (sidebar.classList.contains('mobile-open')) {
-                        toggleSidebar();
-                    }
-                }
-            }
-            
-            // Show mobile button on small screens
-            function checkMobile() {
-                if (mobileBtn) {
-                    if (window.innerWidth <= 768) {
-                        mobileBtn.style.display = 'block';
-                    } else {
-                        mobileBtn.style.display = 'none';
-                    }
-                }
-            }
-            
-            window.addEventListener('resize', checkMobile);
-            checkMobile();
-        });
+        }
     </script>
 </body>
 </html>
