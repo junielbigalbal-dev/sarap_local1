@@ -288,9 +288,7 @@ if ($view === 'products') {
             </div>
 
             <nav class="sidebar-nav">
-                <!-- Main Section -->
                 <div class="nav-section">
-                    <div class="nav-section-title">Main</div>
                     <ul class="nav-menu">
                         <li class="nav-item">
                             <a href="dashboard.php" class="nav-link <?php echo $view === 'home' ? 'active' : ''; ?>">
@@ -311,19 +309,6 @@ if ($view === 'products') {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="dashboard.php?view=vendors" class="nav-link <?php echo $view === 'vendors' ? 'active' : ''; ?>">
-                                <span class="nav-icon">🗺️</span>
-                                <span>Find Vendors</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Orders Section -->
-                <div class="nav-section">
-                    <div class="nav-section-title">Orders</div>
-                    <ul class="nav-menu">
-                        <li class="nav-item">
                             <a href="dashboard.php?view=cart" class="nav-link <?php echo $view === 'cart' ? 'active' : ''; ?>">
                                 <span class="nav-icon">🛒</span>
                                 <span>Cart</span>
@@ -338,13 +323,6 @@ if ($view === 'products') {
                                 <span>My Orders</span>
                             </a>
                         </li>
-                    </ul>
-                </div>
-
-                <!-- Account Section -->
-                <div class="nav-section">
-                    <div class="nav-section-title">Account</div>
-                    <ul class="nav-menu">
                         <li class="nav-item">
                             <a href="dashboard.php?view=messages" class="nav-link <?php echo $view === 'messages' ? 'active' : ''; ?>">
                                 <span class="nav-icon">💬</span>
@@ -352,21 +330,15 @@ if ($view === 'products') {
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="dashboard.php?view=vendors" class="nav-link <?php echo $view === 'vendors' ? 'active' : ''; ?>">
+                                <span class="nav-icon">🗺️</span>
+                                <span>Find Vendors</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="dashboard.php?view=profile" class="nav-link <?php echo $view === 'profile' ? 'active' : ''; ?>">
                                 <span class="nav-icon">👤</span>
                                 <span>Profile</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Other Section -->
-                <div class="nav-section">
-                    <ul class="nav-menu">
-                        <li class="nav-item">
-                            <a href="<?php echo SITE_URL; ?>" class="nav-link">
-                                <span class="nav-icon">🌐</span>
-                                <span>View Site</span>
                             </a>
                         </li>
                         <li class="nav-item">
