@@ -1,9 +1,11 @@
 /* Mobile Sidebar Override - Customer Dashboard */
-/* This file ensures the sidebar is hidden off-screen on mobile */
+/* Comprehensive responsive design for all screen sizes */
 
+/* Tablet and below - Hide sidebar by default */
 @media (max-width: 1024px) {
 
     /* Force sidebar to be hidden off-screen on tablets and mobile */
+    .dashboard .admin-sidebar,
     .dashboard .sidebar {
         position: fixed !important;
         left: 0 !important;
@@ -13,11 +15,11 @@
         z-index: 1001 !important;
         transform: translateX(-100%) !important;
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        background: #1a1a1a !important;
         overflow-y: auto !important;
     }
 
     /* Show sidebar when mobile-open class is added */
+    .dashboard .admin-sidebar.mobile-open,
     .dashboard .sidebar.mobile-open {
         transform: translateX(0) !important;
         box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3) !important;
@@ -27,6 +29,7 @@
     .dashboard .main-content {
         margin-left: 0 !important;
         width: 100% !important;
+        padding: 0 !important;
     }
 
     /* Sidebar overlay */
@@ -46,5 +49,130 @@
     .sidebar-overlay.active {
         display: block;
         opacity: 1;
+    }
+}
+
+/* Mobile phones - Additional adjustments */
+@media (max-width: 768px) {
+
+    /* Reduce sidebar width on small screens */
+    .dashboard .admin-sidebar,
+    .dashboard .sidebar {
+        width: 260px !important;
+    }
+
+    /* Adjust content padding */
+    .dashboard-content,
+    .admin-content {
+        padding: 1rem !important;
+    }
+
+    /* Make cards stack vertically */
+    .stats-grid,
+    .vendor-grid,
+    .dishes-scroll {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Adjust font sizes */
+    .dashboard-header-modern h1 {
+        font-size: 1.5rem !important;
+    }
+
+    .section-title {
+        font-size: 1.25rem !important;
+    }
+
+    /* Mobile navbar should be visible */
+    .mobile-navbar {
+        display: flex !important;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: white;
+        padding: 1rem;
+        border-bottom: 1px solid #e5e7eb;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+/* Small mobile phones */
+@media (max-width: 480px) {
+
+    .dashboard .admin-sidebar,
+    .dashboard .sidebar {
+        width: 240px !important;
+    }
+
+    /* Further reduce padding */
+    .dashboard-content,
+    .admin-content {
+        padding: 0.75rem !important;
+    }
+
+    /* Adjust card padding */
+    .dish-card,
+    .vendor-card,
+    .order-card-modern {
+        padding: 0.75rem !important;
+    }
+
+    /* Smaller fonts */
+    h1 {
+        font-size: 1.25rem !important;
+    }
+
+    h2 {
+        font-size: 1.125rem !important;
+    }
+
+    .btn {
+        font-size: 0.875rem !important;
+        padding: 0.5rem 1rem !important;
+    }
+}
+
+/* Large tablets and small laptops */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    .vendor-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+/* Desktop - Ensure sidebar is always visible */
+@media (min-width: 1025px) {
+
+    .dashboard .admin-sidebar,
+    .dashboard .sidebar {
+        transform: translateX(0) !important;
+        position: fixed !important;
+    }
+
+    .dashboard .main-content {
+        margin-left: 280px !important;
+    }
+
+    .mobile-navbar {
+        display: none !important;
+    }
+
+    .sidebar-overlay {
+        display: none !important;
+    }
+}
+
+/* Landscape orientation fixes */
+@media (max-height: 600px) and (orientation: landscape) {
+    .sidebar-header {
+        padding: 0.75rem !important;
+    }
+
+    .nav-link {
+        padding: 0.5rem 1rem !important;
     }
 }
