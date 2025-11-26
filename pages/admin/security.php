@@ -6,20 +6,35 @@ require_once __DIR__ . '/../../includes/functions.php';
 
 requireRole('admin');
 
-// Get login logs
-$stmt = $pdo->query("
-    SELECT * FROM login_logs
-    ORDER BY created_at DESC
-    LIMIT 100
-");
-$logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Get login logs - handle missing table gracefully
+$logs = [];
+$todayFailed = 0;
+$todaySuccess = 0;
 
-// Get stats
-$stmt = $pdo->query("SELECT COUNT(*) as count FROM login_logs WHERE status = 'failed' AND DATE(created_at) = CURDATE()");
-$todayFailed = $stmt->fetch()['count'];
-
-$stmt = $pdo->query("SELECT COUNT(*) as count FROM login_logs WHERE status = 'success' AND DATE(created_at) = CURDATE()");
-$todaySuccess = $stmt->fetch()['count'];
+try {
+    // Check if table exists first
+    $tableCheck = $pdo->query("SELECT to_regclass('public.login_logs')");
+    $tableExists = $tableCheck->fetchColumn() !== null;
+    
+    if ($tableExists) {
+        $stmt = $pdo->query("
+            SELECT * FROM login_logs
+            ORDER BY created_at DESC
+            LIMIT 100
+        ");
+        $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Get stats - PostgreSQL compatible
+        $stmt = $pdo->query("SELECT COUNT(*) as count FROM login_logs WHERE status = 'failed' AND DATE(created_at) = CURRENT_DATE");
+        $todayFailed = $stmt->fetch()['count'];
+        
+        $stmt = $pdo->query("SELECT COUNT(*) as count FROM login_logs WHERE status = 'success' AND DATE(created_at) = CURRENT_DATE");
+        $todaySuccess = $stmt->fetch()['count'];
+    }
+} catch (PDOException $e) {
+    // Table doesn't exist or error - continue with empty data
+    error_log("Login logs error: " . $e->getMessage());
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -78,6 +93,15 @@ $todaySuccess = $stmt->fetch()['count'];
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php if (empty($logs)): ?>
+                                <tr>
+                                    <td colspan="5" style="text-align: center; padding: 40px; color: var(--gray-500);">
+                                        <div style="font-size: 3rem; margin-bottom: 10px;">🔒</div>
+                                        <p>No login logs available</p>
+                                        <small>Login activity will appear here once the login_logs table is created</small>
+                                    </td>
+                                </tr>
+                                <?php else: ?>
                                 <?php foreach ($logs as $log): ?>
                                 <tr>
                                     <td><?php echo htmlspecialchars($log['email']); ?></td>
@@ -91,6 +115,7 @@ $todaySuccess = $stmt->fetch()['count'];
                                     <td><?php echo formatDateTime($log['created_at']); ?></td>
                                 </tr>
                                 <?php endforeach; ?>
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
