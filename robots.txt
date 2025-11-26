@@ -1,0 +1,19 @@
+# Robots.txt for Sarap Local
+# Allow all search engines to crawl the site
+
+User-agent: *
+Allow: /
+Disallow: /config/
+Disallow: /includes/
+Disallow: /models/
+Disallow: /uploads/
+Disallow: /vendor/
+Disallow: /pages/admin/
+Disallow: /pages/vendor/dashboard.php
+Disallow: /pages/customer/dashboard.php
+
+# Sitemap location
+Sitemap: <?php echo SITE_URL; ?>/sitemap.xml
+
+# Crawl-delay (optional, helps prevent server overload)
+Crawl-delay: 10

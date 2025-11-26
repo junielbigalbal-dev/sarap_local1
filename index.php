@@ -30,10 +30,87 @@ $categories = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo SITE_NAME; ?> - Biliran's #1 Food Delivery</title>
+    
+    <!-- Primary Meta Tags -->
+    <title><?php echo SITE_NAME; ?> - Biliran's #1 Food Delivery | Order Local Food Online</title>
+    <meta name="title" content="<?php echo SITE_NAME; ?> - Biliran's #1 Food Delivery Service">
+    <meta name="description" content="Order delicious local food from the best restaurants in Biliran Province. Fast delivery, fresh ingredients, and authentic Filipino cuisine. Free delivery on your first order!">
+    <meta name="keywords" content="Biliran food delivery, Naval food delivery, Biliran restaurants, Filipino food delivery, local food Biliran, food delivery Philippines, Sarap Local, Biliran delicacies, online food order Biliran">
+    <meta name="author" content="<?php echo SITE_NAME; ?>">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="<?php echo SITE_URL; ?>">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<?php echo SITE_URL; ?>">
+    <meta property="og:title" content="<?php echo SITE_NAME; ?> - Biliran's #1 Food Delivery">
+    <meta property="og:description" content="Order delicious local food from the best restaurants in Biliran Province. Fast delivery, fresh ingredients, and authentic Filipino cuisine.">
+    <meta property="og:image" content="<?php echo SITE_URL; ?>/images/S.png">
+    <meta property="og:site_name" content="<?php echo SITE_NAME; ?>">
+    <meta property="og:locale" content="en_PH">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="<?php echo SITE_URL; ?>">
+    <meta property="twitter:title" content="<?php echo SITE_NAME; ?> - Biliran's #1 Food Delivery">
+    <meta property="twitter:description" content="Order delicious local food from the best restaurants in Biliran Province. Fast delivery, fresh ingredients, and authentic Filipino cuisine.">
+    <meta property="twitter:image" content="<?php echo SITE_URL; ?>/images/S.png">
+    
+    <!-- Geo Tags -->
+    <meta name="geo.region" content="PH-BIL">
+    <meta name="geo.placename" content="Naval, Biliran">
+    <meta name="geo.position" content="11.5544;124.3975">
+    <meta name="ICBM" content="11.5544, 124.3975">
+    
+    <!-- Structured Data / Schema.org -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FoodEstablishment",
+      "name": "<?php echo SITE_NAME; ?>",
+      "description": "Biliran's #1 Food Delivery Service",
+      "url": "<?php echo SITE_URL; ?>",
+      "logo": "<?php echo SITE_URL; ?>/images/S.png",
+      "image": "<?php echo SITE_URL; ?>/images/S.png",
+      "telephone": "+63-912-345-6789",
+      "email": "hello@saraplocal.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Naval",
+        "addressLocality": "Biliran",
+        "addressRegion": "Eastern Visayas",
+        "postalCode": "6560",
+        "addressCountry": "PH"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "11.5544",
+        "longitude": "124.3975"
+      },
+      "servesCuisine": "Filipino",
+      "priceRange": "₱₱",
+      "acceptsReservations": "False",
+      "hasDeliveryMethod": {
+        "@type": "DeliveryMethod",
+        "name": "Food Delivery"
+      }
+    }
+    </script>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="<?php echo SITE_URL; ?>/images/S.png">
+    <link rel="apple-touch-icon" href="<?php echo SITE_URL; ?>/images/S.png">
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/foodpanda-style.css">
     <link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/responsive.css">
 </head>
